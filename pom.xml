@@ -71,12 +71,12 @@
 			<version>3.2.0</version>
 		</dependency>
 
-		<!--		postgresl-->
-		<dependency>
-			<groupId>org.postgresql</groupId>
-			<artifactId>postgresql</artifactId>
-			<scope>runtime</scope>
-		</dependency>
+<!--		&lt;!&ndash;		postgresl&ndash;&gt;-->
+<!--		<dependency>-->
+<!--			<groupId>org.postgresql</groupId>-->
+<!--			<artifactId>postgresql</artifactId>-->
+<!--			<scope>runtime</scope>-->
+<!--		</dependency>-->
 
 		<!--		netty-->
 		<dependency>
