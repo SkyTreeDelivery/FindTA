@@ -1,0 +1,62 @@
+spring:
+  application:
+    name: find_demo
+  mvc:
+    view:
+      prefix: /
+      suffix: .html
+  datasource:
+    #    数据源配置
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5432/St_Study_Project?characterEncoding=utf-8\
+    username: postgres
+    password: zhang002508
+    druid:
+      initial-size: 5
+      max-active: 20
+      min-idle: 10
+      max-wait: 60000
+      validation-query: "select 1"
+      validation-query-timeout: 600000
+      test-on-borrow: false
+      test-on-return: false
+      test-while-idle: true
+      time-between-eviction-runs-millis: 2000
+      min-evictable-idle-time-millis: 600000
+      max-evictable-idle-time-millis: 900000
+      filters: stat
+      stat-view-servlet:
+        login-username: admin
+        login-password: zhang002508
+        enabled: true # 开启之后才能使用控制台
+
+server:
+  port: 8080
+  servlet:
+    context-path: /
+    session:
+      timeout: 30m
+  tomcat:
+    uri-encoding: utf-8
+
+mybatis-plus:
+#  type-aliases-package: com.find.pojo
+  configuration:
+    lazy-loading-enabled: true
+    aggressive-lazy-loading: false
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+    cache-enabled: true
+    map-underscore-to-camel-case: true
+    jdbc-type-for-null: NULL
+  global-config:
+    db-config:
+      id-type: auto
+#  mapper-locations: com/find/mapper/*.xml
+#  mapper-locations: com.find.mapper.*.xml
+# mybatis中的日志默认在debug级别开启，因此要设置日志级别
+logging:
+  level:
+    web: DEBUG
+    com:
+      find:
+        mapper: debug

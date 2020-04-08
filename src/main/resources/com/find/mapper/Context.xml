@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://www.mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.find.mapper.Context">
+<!--    公用空间，用于定义sql-->
+    <sql id="chat_user_columns">
+        ${a}.id,
+        ${a}.username,
+        ${a}.password,
+        ${a}.age,
+        ${a}.gender,
+        ${a}.face_image,
+        ${a}.face_image_big,
+        ${a}.nickname,
+        ${a}.email,
+        ${a}.gmt_created,
+        ${a}.gmt_modified,
+        ${a}.cid,
+        ${a}.phone,
+        ST_AsGeoJSON(${a}.location),
+        ${a}.token
+    </sql>
+
+    <sql id="chat_friendrequest_columns">
+        ${a}.id,
+        ${a}.send_user_id,
+        ${a}.accept_user_id,
+        ${a}.request_message,
+        ${a}.gmt_created,
+        ${a}.gmt_modified
+    </sql>
+
+    <sql id="chat_friend_columns">
+        ${a}.id,
+        ${a}.my_id,
+        ${a}.friend_id,
+        ${a}.gmt_created,
+        ${a}.gmt_modified
+    </sql>
+
+    <sql id="chat_tag_group_columns">
+        ${a}.id,
+        ${a}.tag_group_id,
+        ${a}.gmt_created,
+        ${a}.gmt_modified
+    </sql>
+
+    <sql id="chat_tag_columns">
+        ${a}.id,
+        ${a}.tg_id,
+        ${a}.tag_context,
+        ${a}.gmt_created,
+        ${a}.gmt_modified
+    </sql>
+
+    <sql id="chat_user_tag_columns">
+        ${a}.id,
+        ${a}.user_id,
+        ${a}.tag_id,
+        ${a}.gmt_created,
+        ${a}.gmt_modified
+    </sql>
+
+
+
+</mapper>
