@@ -1,7 +1,7 @@
 package com.find.Service.ServiceImp;
 
 import com.find.Service.UserService;
-import com.find.Util.Enum.CustomErrorCodeEnum;
+import com.find.Util.Enum.EnumImp.CustomErrorCodeEnum;
 import com.find.Util.Exception.CustomException;
 import com.find.Util.Utils.MD5Util;
 import com.find.mapper.TagMapper;

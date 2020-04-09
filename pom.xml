@@ -71,12 +71,26 @@
 			<version>3.2.0</version>
 		</dependency>
 
-<!--		&lt;!&ndash;		postgresl&ndash;&gt;-->
-<!--		<dependency>-->
-<!--			<groupId>org.postgresql</groupId>-->
-<!--			<artifactId>postgresql</artifactId>-->
-<!--			<scope>runtime</scope>-->
-<!--		</dependency>-->
+		<!--		postgresl-->
+		<dependency>
+			<groupId>org.postgresql</groupId>
+			<artifactId>postgresql</artifactId>
+		</dependency>
+
+
+		<!--		提供postgis类型处理器支持-->
+		<dependency>
+			<groupId>com.eyougo</groupId>
+			<artifactId>mybatis-typehandlers-postgis</artifactId>
+			<version>1.0</version>
+			<exclusions>
+<!--				引入了mybatis会引发异常-->
+				<exclusion>
+						<groupId>org.mybatis</groupId>
+						<artifactId>mybatis</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
 
 		<!--		netty-->
 		<dependency>
@@ -121,9 +135,31 @@
 			<version>1.2.47</version>
 		</dependency>
 
-
+<!--		geoTools-->
+		<dependency>
+			<groupId>org.geotools</groupId>
+			<artifactId>gt-geojson</artifactId>
+			<version>21.1</version>
+		</dependency>
 
 	</dependencies>
+
+	<repositories>
+		<repository>
+			<id>osgeo</id>
+			<name>OSGeo Release Repository</name>
+			<url>https://repo.osgeo.org/repository/release/</url>
+			<snapshots><enabled>false</enabled></snapshots>
+			<releases><enabled>true</enabled></releases>
+		</repository>
+		<repository>
+			<id>osgeo-snapshot</id>
+			<name>OSGeo Snapshot Repository</name>
+			<url>https://repo.osgeo.org/repository/snapshot/</url>
+			<snapshots><enabled>true</enabled></snapshots>
+			<releases><enabled>false</enabled></releases>
+		</repository>
+	</repositories>
 
 	<build>
 		<plugins>

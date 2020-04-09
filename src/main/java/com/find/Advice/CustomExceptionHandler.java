@@ -1,6 +1,6 @@
 package com.find.Advice;
 
-import com.find.Util.Enum.HttpResponseEnum;
+import com.find.Util.Enum.EnumImp.HttpResponseEnum;
 import com.find.Util.Exception.CustomException;
 import com.find.Util.HttpResultBuiler;
 import org.slf4j.Logger;

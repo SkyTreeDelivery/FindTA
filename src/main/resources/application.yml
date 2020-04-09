@@ -51,6 +51,7 @@ mybatis-plus:
   global-config:
     db-config:
       id-type: auto
+  type-handlers-package: com.find.TypeHandler
 #  mapper-locations: com/find/mapper/*.xml
 #  mapper-locations: com.find.mapper.*.xml
 # mybatis中的日志默认在debug级别开启，因此要设置日志级别

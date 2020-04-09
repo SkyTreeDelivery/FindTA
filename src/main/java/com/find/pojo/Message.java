@@ -1,6 +1,8 @@
 package com.find.pojo;
 
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.find.Util.Annonation.GeoField;
+import com.find.Util.Geometry.Point;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -27,9 +29,10 @@ public class Message implements Serializable {
 
     private Integer signFlag;
 
-    private String sendUserLoc;
+    @GeoField
+    private Point sendUserLoc;
 
-    private String acceptUserLoc;
+    private Point acceptUserLoc;
 
     private Date gmtCreated;
 

@@ -1,7 +1,7 @@
 package com.find.Interceptor;
 
 import com.find.Service.UserService;
-import com.find.Util.Enum.CustomErrorCodeEnum;
+import com.find.Util.Enum.EnumImp.CustomErrorCodeEnum;
 import com.find.Util.Exception.CustomException;
 import com.find.Util.Utils.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;

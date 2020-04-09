@@ -1,5 +1,7 @@
 package com.find.Advice;
 
+import com.alibaba.fastjson.JSON;
+import com.find.Util.JsonFilter.GeoFieldSerilizeFilter;
 import com.find.Util.HttpResultBuiler;
 import org.springframework.core.MethodParameter;
 import org.springframework.http.MediaType;
@@ -25,7 +27,7 @@ public class ResponseBodyUniformUnity implements ResponseBodyAdvice {
         if(o instanceof HttpResultBuiler.HttpResult){
             return o;
         }else if(o != null){
-            return HttpResultBuiler.ok(o);
+            return HttpResultBuiler.ok(JSON.toJSONString(o, new GeoFieldSerilizeFilter()));
         }else{
             return HttpResultBuiler.error500();
         }

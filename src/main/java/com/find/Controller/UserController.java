@@ -3,7 +3,7 @@ package com.find.Controller;
 
 import com.find.Service.UserService;
 import com.find.Util.Utils.BeanArrayUtils;
-import com.find.Util.Enum.CustomErrorCodeEnum;
+import com.find.Util.Enum.EnumImp.CustomErrorCodeEnum;
 import com.find.Util.Exception.CustomException;
 import com.find.Util.Utils.GeoJsonUtils;
 import com.find.Util.Utils.StringUtils;
@@ -64,6 +64,7 @@ public class UserController {
         }
         List<User> users = userService.listUsersByNickname(nickname);
         List<UserVO> userVOs = BeanArrayUtils.copyListProperties(users,UserVO.class);
+        System.out.println(userVOs.toString());
         return userVOs;
     }
 

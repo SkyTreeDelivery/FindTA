@@ -1,8 +1,8 @@
 package com.find.Util;
 
 import com.alibaba.fastjson.JSONObject;
-import com.find.Util.Enum.CustomErrorCodeEnum;
-import com.find.Util.Enum.HttpResponseEnum;
+import com.find.Util.Enum.EnumImp.CustomErrorCodeEnum;
+import com.find.Util.Enum.EnumImp.HttpResponseEnum;
 
 /**
  * @Description : 自定义响应数据结构

@@ -1,5 +1,7 @@
 package com.find.pojo.vo;
 
+import com.find.Util.Annonation.GeoField;
+import com.find.Util.Geometry.Point;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -16,6 +18,7 @@ public class UserVO {
     private String face_image_big;
     private String pickname;
     private String email;
-    private String location;
+    @GeoField
+    private Point location;
     private String phone;
 }

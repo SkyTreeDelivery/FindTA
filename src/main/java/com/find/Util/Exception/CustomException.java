@@ -1,6 +1,6 @@
 package com.find.Util.Exception;
 
-import com.find.Util.Enum.CustomErrorCodeEnum;
+import com.find.Util.Enum.EnumImp.CustomErrorCodeEnum;
 
 public class CustomException extends Exception {
 

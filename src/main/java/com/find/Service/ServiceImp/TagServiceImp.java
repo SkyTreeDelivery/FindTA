@@ -1,5 +1,6 @@
 package com.find.Service.ServiceImp;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.find.Service.TagService;
 import com.find.mapper.TagMapper;
 import com.find.pojo.Tag;
@@ -16,15 +17,17 @@ public class TagServiceImp implements TagService {
 
     @Override
     public List<Tag> listTagsByTagGroup(Integer groupId) {
-        return tagMapper.listTagsByGroup(groupId);
+        QueryWrapper<Tag> wrapper = new QueryWrapper<>();
+        wrapper.eq("tg_id",groupId);
+        return tagMapper.selectList(wrapper);
     }
 
     @Override
     public List<Tag> listAll() {
-        return tagMapper.listAll();
+        return tagMapper.selectList(null);
     }
 
     public Tag getTagById(Integer tagId){
-        return tagMapper.getTagById(tagId);
+        return tagMapper.selectById(tagId);
     }
 }

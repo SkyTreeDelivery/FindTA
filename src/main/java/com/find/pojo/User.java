@@ -1,6 +1,8 @@
 package com.find.pojo;
 
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.find.Util.Annonation.GeoField;
+import com.find.Util.Geometry.Point;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -42,7 +44,8 @@ public class User implements Serializable {
     @Email
     private String email;
 
-    private String location;
+    @GeoField
+    private Point location;
 
     @NotNull(message = "设备id不能为空")
     private String cid;

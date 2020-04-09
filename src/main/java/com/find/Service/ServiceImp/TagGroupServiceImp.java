@@ -16,6 +16,6 @@ public class TagGroupServiceImp implements TagGroupService {
 
     @Override
     public List<TagGroup> listAll() {
-        return tagGroupMapper.listAll();
+        return tagGroupMapper.selectList(null);
     }
 }

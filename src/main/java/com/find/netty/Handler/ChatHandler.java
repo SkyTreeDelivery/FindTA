@@ -3,10 +3,9 @@ package com.find.netty.Handler;
 import com.alibaba.fastjson.JSONObject;
 import com.find.Service.ServiceImp.UserServiceImp;
 import com.find.Service.UserService;
-import com.find.Util.Enum.ChatHandlerEnum;
-import com.find.Util.Enum.CustomErrorCodeEnum;
+import com.find.Util.Enum.EnumImp.ChatHandlerEnum;
+import com.find.Util.Enum.EnumImp.CustomErrorCodeEnum;
 import com.find.Util.Exception.CustomException;
-import com.find.Util.Utils.GeoJsonUtils;
 import com.find.Util.Utils.SpringUtils;
 import com.find.Util.Utils.StringUtils;
 import com.find.pojo.Message;
@@ -63,18 +62,6 @@ public class ChatHandler extends SimpleChannelInboundHandler<TextWebSocketFrame>
             //用户必须存在
             if(userService.userIsExist(sendUserId) == null || userService.userIsExist(acceptUserId) == null){
                 throw new CustomException(CustomErrorCodeEnum.USER_NOT_EXIST);
-            }
-            //传入的地址信息必须正确
-            if(message.getSendUserLoc() != null){
-                if(!GeoJsonUtils.isPoint(message.getSendUserLoc())){
-                    throw new CustomException(CustomErrorCodeEnum.GEOJSON_CANT_PARSE);
-                }
-            }
-            //传入的地址信息必须正确
-            if(message.getAcceptUserLoc() != null){
-                if(!GeoJsonUtils.isPoint(message.getAcceptUserLoc())){
-                    throw new CustomException(CustomErrorCodeEnum.GEOJSON_CANT_PARSE);
-                }
             }
             if(StringUtils.isBlank(msgStr)){
                 throw new CustomException(CustomErrorCodeEnum.MESSAGE_IS_BLANK);

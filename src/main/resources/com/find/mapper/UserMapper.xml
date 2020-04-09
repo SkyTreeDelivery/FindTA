@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://www.mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.find.mapper.UserMapper">
     <sql id="user_columns">
-        id, username, password, age, gender, face_image, face_image_big, nickname, email, gmtCreated, gmtModified, cid, phone, ST_AsGeoJSON(location) token as location
+        id, username, password, age, gender, face_image, face_image_big, nickname, email, gmt_created, gmt_modified, cid, phone, location, token
     </sql>
 
     <sql id="friend_request_columns">
@@ -51,7 +51,7 @@
         <include refid="user_columns"/>
         from chat_user
         <where>
-            username like #{username}
+            username like #{nickname}
         </where>
     </select>
 

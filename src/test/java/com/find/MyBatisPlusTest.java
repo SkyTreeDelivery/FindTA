@@ -5,7 +5,8 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.find.Util.Enum.AgeEnum;
+import com.find.Util.Enum.EnumImp.GenderEnum;
+import com.find.Util.Geometry.Point;
 import com.find.mapper.UserMapper;
 import com.find.pojo.User;
 import org.apache.ibatis.session.SqlSession;
@@ -54,7 +55,7 @@ public class MyBatisPlusTest {
         user.setPassword("zhang002508");
         user.setAge(50);
         user.setEmail("zhang11375152@sina.com");
-        user.setGender(AgeEnum.MAN.code);
+        user.setGender(GenderEnum.MAN.code);
         user.setNickname("测试52");
         user.setCid(UUID.randomUUID().toString());
         user.setPhone("15555555557");
@@ -69,7 +70,7 @@ public class MyBatisPlusTest {
         User user = new User();
         user.setId(29);
         user.setPassword("666666");
-        user.setGender(AgeEnum.WOMAN.code);
+        user.setGender(GenderEnum.WOMAN.code);
         userMapper.updateById(user);
     }
 
@@ -77,7 +78,7 @@ public class MyBatisPlusTest {
     public void updateWrapperTest(){
         User user = new User();
         user.setPassword("88888");
-        user.setGender(AgeEnum.WOMAN.code);
+        user.setGender(GenderEnum.WOMAN.code);
         QueryWrapper<User> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("id",29);
         userMapper.update(user,queryWrapper);
@@ -86,7 +87,7 @@ public class MyBatisPlusTest {
     @Test
     public void updateUpdateWrapperTest(){
         UpdateWrapper<User> updateWrapper = new UpdateWrapper<>();
-        updateWrapper.eq("id",29).set("password",9999999).set("gender",AgeEnum.MAN.code);
+        updateWrapper.eq("id",29).set("password",9999999).set("gender", GenderEnum.MAN.code);
         userMapper.update(null,updateWrapper);
     }
 
@@ -180,5 +181,30 @@ public class MyBatisPlusTest {
         List<User> records2 = userIPage.getRecords();
         logger.debug("result ==> " + records1.toString());
         logger.debug("result ==> " + records2.toString());
+    }
+
+    @Test
+    public void testGeo(){
+        com.find.pojo.User user = new User();
+        user.setUsername("zhang55");
+        user.setPassword("zhang002508");
+        user.setAge(50);
+        user.setEmail("zhang11375155@sina.com");
+        user.setGender(GenderEnum.MAN.code);
+        user.setNickname("测试55");
+        user.setCid(UUID.randomUUID().toString());
+        user.setPhone("15555555559");
+        user.setGmtCreated(new Date());
+        user.setGmtModified(new Date());
+        user.setLocation(new Point(10,10));
+        userMapper.insert(user);
+    }
+
+    @Test
+    public void selectGeo(){
+        User user = userMapper.selectById(33);
+        if(user != null){
+            logger.debug(user.toString());
+        }
     }
 }
