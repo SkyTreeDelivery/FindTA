@@ -1,6 +1,6 @@
 package com.find.pojo.dto;
 
-import com.find.pojo.PO.Message;
+import com.find.pojo.po.Message;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

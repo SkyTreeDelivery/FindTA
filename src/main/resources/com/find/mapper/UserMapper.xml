@@ -7,7 +7,7 @@
 
     <cache/>
 
-    <select id="listUserByLoc" resultType="com.find.pojo.PO.User">
+    <select id="listUserByLoc" resultType="com.find.pojo.po.User">
         select
         <include refid="user_columns"/>
         from chat_user

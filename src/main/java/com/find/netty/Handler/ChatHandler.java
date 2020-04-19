@@ -8,7 +8,7 @@ import com.find.Util.Enum.EnumImp.CustomErrorCodeEnum;
 import com.find.Util.Exception.CustomException;
 import com.find.Util.Utils.SpringUtils;
 import com.find.Util.Utils.StringUtils;
-import com.find.pojo.PO.Message;
+import com.find.pojo.po.Message;
 import com.find.pojo.dto.ChatHandlerDTO;
 import com.find.pojo.vo.MessageVO;
 import io.netty.channel.Channel;

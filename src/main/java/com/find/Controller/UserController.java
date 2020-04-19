@@ -9,7 +9,7 @@ import com.find.Util.Exception.CustomException;
 import com.find.Util.Utils.BeanArrayUtils;
 import com.find.Util.Utils.StringUtils;
 import com.find.Util.Utils.ValidateUtils;
-import com.find.pojo.PO.*;
+import com.find.pojo.po.*;
 import com.find.pojo.dto.DtoPo.FriendRequestDTO;
 import com.find.pojo.dto.DtoPo.UserDTO;
 import com.find.pojo.dto.DtoPo.UserTagDTO;
@@ -139,7 +139,7 @@ public class UserController {
             throw new CustomException(CustomErrorCodeEnum.PARAM_VERIFY_ERROR);
         }
         if(!userService.friendRequestIsExist(friendRequestId)){
-            throw new CustomException(CustomErrorCodeEnum.USER_NOT_EXIST);
+            throw new CustomException(CustomErrorCodeEnum.FRIEND_REQUEST_NOT_EXIST);
         }
         return userService.getFriendRequestById(friendRequestId);
     }
@@ -174,7 +174,7 @@ public class UserController {
             throw new CustomException(CustomErrorCodeEnum.PARAM_VERIFY_ERROR);
         }
         if(!userService.friendIsExist(friendId)){
-            throw new CustomException(CustomErrorCodeEnum.USER_NOT_EXIST);
+            throw new CustomException(CustomErrorCodeEnum.NO_FRINEND_RELATION);
         }
         return userService.getFriendById(friendId);
     }
@@ -210,7 +210,7 @@ public class UserController {
             throw new CustomException(CustomErrorCodeEnum.PARAM_VERIFY_ERROR);
         }
         if(!userService.messageIsExist(messageId)){
-            throw new CustomException(CustomErrorCodeEnum.USER_NOT_EXIST);
+            throw new CustomException(CustomErrorCodeEnum.NO_MESSAGE);
         }
         return userService.getMessageById(messageId);
     }
@@ -254,7 +254,7 @@ public class UserController {
             throw new CustomException(CustomErrorCodeEnum.PARAM_VERIFY_ERROR);
         }
         if(!userService.userTagIsExist(userTagId)){
-            throw new CustomException(CustomErrorCodeEnum.USER_NOT_EXIST);
+            throw new CustomException(CustomErrorCodeEnum.NO_USER_TAG);
         }
         return userService.getUserTagById(userTagId);
     }

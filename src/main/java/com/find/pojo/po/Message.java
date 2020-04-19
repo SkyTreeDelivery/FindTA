@@ -1,4 +1,4 @@
-package com.find.pojo.PO;
+package com.find.pojo.po;
 
 import com.alibaba.fastjson.annotation.JSONField;
 import com.baomidou.mybatisplus.annotation.TableName;
@@ -14,36 +14,27 @@ import java.time.LocalDateTime;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@TableName("chat_user")
-public class User implements Serializable {
-
+@TableName("chat_message")
+public class Message implements Serializable {
     private Integer id;
 
-    private String username;
+    private Integer sendUserId;
 
-    private String password;
+    private Integer acceptUserId;
 
-    private Integer age;
+    private String message;
 
-    private Integer gender;
-
-    private String face_image;
-
-    private String face_image_big;
-
-    private String nickname;
-
-    private String email;
+    private Integer signFlag;
 
     @JSONField(serializeUsing = GeoCodc.class)
-    private Point location;
+    private Point sendUserLoc;
 
-    private String cid;
+    @JSONField(serializeUsing = GeoCodc.class)
+    private Point acceptUserLoc;
 
-    private String phone;
+    Integer partId;
 
-//    @TableField(updateStrategy = FieldStrategy.IGNORED)
-    private String token;
+    Integer msgIndex;
 
     private LocalDateTime gmtCreated;
 

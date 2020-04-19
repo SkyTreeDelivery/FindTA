@@ -29,6 +29,8 @@ public enum CustomErrorCodeEnum {
     FRIEND_REQUEST_NOT_EXIST(30004,"该好友请求不存在"),
     MESSAGE_IS_BLANK(30005,"信息不能为空"),
     NO_FRINEND_RELATION(30006,"不存在好友关系"),
+    NO_MESSAGE(30007,"消息不存在"),
+    NO_USER_TAG(30008,"用户标签不存在"),
 
     /* 系统错误：40001-49999 */
     SYSTEM_INNER_ERROR(40001, "系统繁忙，请稍后重试"),

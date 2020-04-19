@@ -1,4 +1,4 @@
-package com.find.pojo.PO;
+package com.find.pojo.po;
 
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.AllArgsConstructor;

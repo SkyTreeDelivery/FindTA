@@ -1,7 +1,7 @@
 package com.find;
 
 import com.find.Util.Enum.EnumImp.POJOEnum.GenderEnum;
-import com.find.pojo.PO.User;
+import com.find.pojo.po.User;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;

@@ -2,7 +2,7 @@ package com.find.Service;
 
 import com.find.Util.Enum.EnumImp.ControlEnum.FriendRequestHandleEnum;
 import com.find.Util.Exception.CustomException;
-import com.find.pojo.PO.*;
+import com.find.pojo.po.*;
 import com.find.pojo.dto.DtoPo.FriendRequestDTO;
 import com.find.pojo.dto.DtoPo.UserDTO;
 import com.find.pojo.dto.DtoPo.UserTagDTO;

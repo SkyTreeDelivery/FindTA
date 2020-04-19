@@ -11,7 +11,7 @@ import com.find.Util.Utils.MD5Util;
 import com.find.Util.Utils.StringUtils;
 import com.find.Util.Utils.ValidateUtils;
 import com.find.mapper.*;
-import com.find.pojo.PO.*;
+import com.find.pojo.po.*;
 import com.find.pojo.dto.DtoPo.FriendRequestDTO;
 import com.find.pojo.dto.DtoPo.UserDTO;
 import com.find.pojo.dto.DtoPo.UserTagDTO;

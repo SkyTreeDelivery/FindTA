@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.InitBinder;
 import java.time.LocalDateTime;
 
 @ControllerAdvice
-public class DateBindingAdvice {
+public class DataBindingAdvice {
     @InitBinder
     public void dataBind(WebDataBinder binder){
         binder.registerCustomEditor(Point.class, new DateBinders.GeoBinder());

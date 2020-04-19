@@ -5,6 +5,9 @@ spring:
     view:
       prefix: /
       suffix: .html
+  http:
+    encoding:
+      force: true
   datasource:
     #    数据源配置
     driver-class-name: org.postgresql.Driver
@@ -29,6 +32,7 @@ spring:
         login-username: admin
         login-password: zhang002508
         enabled: true # 开启之后才能使用控制台
+
 
 server:
   port: 5757

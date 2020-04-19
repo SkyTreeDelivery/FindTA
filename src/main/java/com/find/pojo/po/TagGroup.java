@@ -1,4 +1,4 @@
-package com.find.pojo.PO;
+package com.find.pojo.po;
 
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.AllArgsConstructor;
@@ -11,16 +11,14 @@ import java.time.LocalDateTime;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@TableName("chat_friend")
-public class Friend implements Serializable {
+@TableName("chat_tag_group")
+public class TagGroup implements Serializable {
+
     private Integer id;
 
-    private Integer myId;
-
-    private Integer friendId;
+    private String tagGroupName;
 
     private LocalDateTime gmtCreated;
 
     private LocalDateTime gmtModified;
-
 }

@@ -9,7 +9,7 @@ import com.find.Service.UserService;
 import com.find.Util.Enum.EnumImp.POJOEnum.GenderEnum;
 import com.find.Util.Exception.CustomException;
 import com.find.mapper.*;
-import com.find.pojo.PO.User;
+import com.find.pojo.po.User;
 import com.find.pojo.dto.DtoPo.UserDTO;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
