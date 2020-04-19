@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.js"></script>
+<head>
+    <meta charset="UTF-8">
+    <title>Chat</title>
+</head>
+<body>
+<div><h1>聊天室</h1></div>
+<script>
+    $(function () {
+        window.CHAT={
+            connectStatus:0,
+
+            socket: null,
+            init:function () {
+                if(window.WebSocket){
+                    CHAT.socket = new WebSocket("ws://192.168.43.84:8088/ws");
+                    CHAT.socket.onopen = function () {
+                        console.log("连结建立成功");
+                        console.log(CHAT.connectStatus);
+                        CHAT.connectStatus = 1;
+                        console.log(CHAT.connectStatus);
+                    };
+                    this.socket.onclose = function (ev) {
+                        console.log("连接关闭");
+                        CHAT.connectStatus = 0;
+                    };
+                    this.socket.onerror = function () {
+                        console.log("发生错误");
+                        CHAT.connectStatus = 0;
+                    };
+                    this.socket.onmessage = function (ev) {
+                        console.log("接受的消息为" + ev.data);
+                        var receiveMsg = $("#receiveMsg").text();
+                        $("#receiveMsg").append("<br>" + ev.data)
+                    }
+                }else{
+                    alert("浏览器不支持websocket");
+                }
+            },
+            chat: function (msg) {
+                console.log(CHAT.connectStatus);
+                if(CHAT.connectStatus){
+                    CHAT.socket.send(msg);
+                }
+            }
+        };
+        CHAT.init();
+        var test = function(username,password){
+            this.aaaa = 1;
+            this.username = username;
+            this.password = password;
+
+            var aaaa = 1;
+            var v1 = username + password + aaaa;
+
+        };
+
+
+        $("#button").click(function () {
+
+            CHAT.chat();
+        });
+
+
+        function getDTO(type){
+            if(type === 0){
+                return [{
+                    "handlerType":0,
+                    "connectUserId":49
+                },{
+                    "handlerType":0,
+                    "connectUserId":9
+                }]
+            }else if(type === 1){
+                return {
+                    "handlerType":1,
+                    "message":{
+                        "sendUserId":49,
+                        "acceptUserId":9,
+                        "message":"你好"
+                    }
+                }
+            }
+        }
+    })
+
+</script>
+<input type="text" id="msgContext">
+<input type="button" value="点我发送" id="button">
+<div id="receiveMsg"></div>
+
+</body>
+</html>

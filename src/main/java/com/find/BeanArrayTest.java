@@ -1,7 +1,7 @@
 package com.find;
 
 import com.find.Util.Utils.BeanArrayUtils;
-import com.find.pojo.User;
+import com.find.pojo.PO.User;
 import com.find.pojo.vo.UserVO;
 
 import java.util.ArrayList;

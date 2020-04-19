@@ -5,10 +5,12 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.find.Util.Enum.EnumImp.GenderEnum;
-import com.find.Util.Geometry.Point;
-import com.find.mapper.UserMapper;
-import com.find.pojo.User;
+import com.find.Service.UserService;
+import com.find.Util.Enum.EnumImp.POJOEnum.GenderEnum;
+import com.find.Util.Exception.CustomException;
+import com.find.mapper.*;
+import com.find.pojo.PO.User;
+import com.find.pojo.dto.DtoPo.UserDTO;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.junit.jupiter.api.Test;
@@ -21,6 +23,7 @@ import org.springframework.core.io.Resource;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.time.LocalDateTime;
 import java.util.*;
 
 @SpringBootTest
@@ -28,8 +31,28 @@ public class MyBatisPlusTest {
 
     private final static Logger logger = LoggerFactory.getLogger(MyBatisPlusTest.class);
 
+    @javax.annotation.Resource
+    UserMapper userMapper;
+
+    @javax.annotation.Resource
+    UserTagMapper userTagMapper;
+
+    @javax.annotation.Resource
+    TagMapper tagMapper;
+
+    @javax.annotation.Resource
+    FriendMapper friendMapper;
+
+    @javax.annotation.Resource
+    RequestMapper requestMapper;
+
+    @javax.annotation.Resource
+    MessageMapper messageMapper;
+
     @Autowired
-    private UserMapper userMapper;
+    private UserService userService;
+
+
 
     @Test
     public void test() throws IOException {
@@ -59,8 +82,8 @@ public class MyBatisPlusTest {
         user.setNickname("测试52");
         user.setCid(UUID.randomUUID().toString());
         user.setPhone("15555555557");
-        user.setGmtCreated(new Date());
-        user.setGmtModified(new Date());
+        user.setGmtCreated(LocalDateTime.now());
+        user.setGmtModified(LocalDateTime.now());
         userMapper.insert(user);
         logger.debug(user.toString());
     }
@@ -184,20 +207,17 @@ public class MyBatisPlusTest {
     }
 
     @Test
-    public void testGeo(){
-        com.find.pojo.User user = new User();
-        user.setUsername("zhang55");
+    public void testGeo() throws CustomException {
+        UserDTO user = new UserDTO();
+        user.setUsername("zhang62");
         user.setPassword("zhang002508");
         user.setAge(50);
-        user.setEmail("zhang11375155@sina.com");
+        user.setEmail("zhang11375162@sina.com");
         user.setGender(GenderEnum.MAN.code);
-        user.setNickname("测试55");
+        user.setNickname("测试62");
         user.setCid(UUID.randomUUID().toString());
-        user.setPhone("15555555559");
-        user.setGmtCreated(new Date());
-        user.setGmtModified(new Date());
-        user.setLocation(new Point(10,10));
-        userMapper.insert(user);
+        user.setPhone("15555555565");
+        userService.register(user);
     }
 
     @Test
@@ -206,5 +226,21 @@ public class MyBatisPlusTest {
         if(user != null){
             logger.debug(user.toString());
         }
+    }
+
+    @Test
+    public void testModify(){
+        User zhang60 = userService.getUserByUsername("zhang60");
+        zhang60.setGender(GenderEnum.WOMAN.code);
+        userService.updateUser(zhang60);
+    }
+
+    @Test
+    public void testg(){
+        userMapper.selectById(0);
+        tagMapper.selectById(0);
+        messageMapper.selectById(0);
+        friendMapper.selectById(0);
+        requestMapper.selectById(0);
     }
 }

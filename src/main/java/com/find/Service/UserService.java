@@ -1,7 +1,11 @@
 package com.find.Service;
 
+import com.find.Util.Enum.EnumImp.ControlEnum.FriendRequestHandleEnum;
 import com.find.Util.Exception.CustomException;
-import com.find.pojo.*;
+import com.find.pojo.PO.*;
+import com.find.pojo.dto.DtoPo.FriendRequestDTO;
+import com.find.pojo.dto.DtoPo.UserDTO;
+import com.find.pojo.dto.DtoPo.UserTagDTO;
 import com.find.pojo.dto.MessageDTO;
 import com.find.pojo.dto.UserLocDTO;
 import com.find.pojo.vo.FriendListVO;
@@ -16,11 +20,13 @@ import java.util.List;
 public interface UserService {
 
     /*====================== User ==============================*/
-    String register(User user) throws CustomException;
+    String register( UserDTO userDTO) throws CustomException;
 
     Boolean verifyUser(String username, String password);
 
-    String login(User user) throws CustomException;
+    String login(String username, String password, String cid) throws CustomException;
+
+    Boolean logout(String token) throws CustomException;
 
     Boolean updateUser(User user);
 
@@ -36,7 +42,7 @@ public interface UserService {
 
     List<User> listUsersByLoc(UserLocDTO userLocDTO);
 
-    List<User> listUsersByTagList(List<Integer> tagIdList);
+    List<User> listUsersByTagId(Integer tagId);
 
     Boolean tokenIsExist(String token);
 
@@ -53,36 +59,66 @@ public interface UserService {
     /*====================== Friend（Link User to User） ==============================*/
     Boolean addFriend(Friend friend);
 
-    List<FriendListVO> listFriendsByUserId(Integer userId);
+    List<FriendListVO> listFriendsByUserId(Integer userId) throws Exception;
+
+    Friend getFriendById(Integer friendId);
 
     Friend getFriendBySendIdAndAcceptId(Integer sendUserId,Integer acceptUserId);
 
-    Boolean deleteFriend(Integer myId, Integer friendId) throws CustomException;
+    Boolean removeFriend(Integer myId, Integer friendId) throws CustomException;
+
+    Boolean friendIsExist(Integer friendRelationId);
 
     /*====================== Message（Link User To User） ==============================*/
     Boolean addMessage(Message message);
 
+    Message getMessageById(Integer messageId);
+
     List<MessageVO> listChatMsg(MessageDTO messageDTO);
+
+    List<MessageVO> listAllUnSignMessage(Integer userId);
 
     Boolean signMessage(List<Integer> ids);
 
+    Boolean signAllMessages(Integer userId);
+
     Boolean removeMessageById(Integer messageId);
 
+    Boolean messageIsExist(Integer messageId);
+
+    /*====================== ChatPart（one to many） message ==============================*/
+
+    Boolean addChatPart(Integer userAId, Integer userBId);
+
+    Boolean updateChatPart(ChatPart chatPart);
+
+    ChatPart getChatPartById(Integer chatPartId);
+
+    ChatPart getChatPartByStrPart(String strPart);
+
+    Boolean chatPartIsExist(Integer chatPart);
+
     /*====================== FriendRequestVO（Link User To User）==============================*/
-    Boolean addFriendRequest(FriendRequest friendRequest) throws CustomException;
+    Boolean addFriendRequest(FriendRequestDTO friendRequestDTO) throws CustomException;
 
     FriendRequest getFriendRequestById(Integer frid);
 
-    List<FriendRequestListVO> listFriendRequestsByUserId(Integer userId);
+    List<FriendRequestListVO> listFriendRequestsByUserId(Integer userId) throws Exception;
 
-    Boolean handleFriendRequest(Integer friendRequestId, Boolean reply) throws CustomException;
+    Boolean handleFriendRequest(Integer friendRequestId, FriendRequestHandleEnum reply) throws CustomException;
 
     Boolean removeFriendRequestById(Integer frid);
 
+    Boolean friendRequestIsExist(Integer friendRequestId);
+
     /*====================== UserTag（Link User To Tag） ==============================*/
-    Boolean addUserTag(UserTag userTag) throws CustomException;
+    Boolean addUserTag(UserTagDTO userTagDTO) throws CustomException;
+
+    UserTag getUserTagById(Integer userTagId);
 
     List<UserTagVO> listTagsByUserId(Integer userId) throws CustomException;
 
     Boolean removeUserTagById(Integer userTagId);
+
+    Boolean userTagIsExist(Integer userTagId);
 }

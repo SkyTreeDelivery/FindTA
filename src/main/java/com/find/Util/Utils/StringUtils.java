@@ -6,4 +6,12 @@ public class StringUtils {
         return str == null || str.equals("");
     }
 
+    public static String convertChatPart(Integer userAId, Integer userBId){
+        if(userAId < userBId){
+            return userAId + "-" + userBId;
+        }else{
+            return userBId + "-" + userAId;
+        }
+    }
+
 }

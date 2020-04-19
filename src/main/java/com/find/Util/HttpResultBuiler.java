@@ -1,8 +1,11 @@
 package com.find.Util;
 
 import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.annotation.JSONField;
 import com.find.Util.Enum.EnumImp.CustomErrorCodeEnum;
 import com.find.Util.Enum.EnumImp.HttpResponseEnum;
+
+import java.io.Serializable;
 
 /**
  * @Description : 自定义响应数据结构
@@ -27,6 +30,11 @@ public class HttpResultBuiler {
 
     public static <T> HttpResult<T> ok(String msg, T data){
         return new HttpResult<T>(HttpResponseEnum.OK.code, msg, data);
+    }
+
+    /*-------------------------------- error404 ----------------------------------------------*/
+    public static <T> HttpResult<T> error404(){
+        return new HttpResult<T>(HttpResponseEnum.NOT_FOUND.code, HttpResponseEnum.NOT_FOUND.msg, null);
     }
 
     /*-------------------------------- error500 ----------------------------------------------*/
@@ -75,9 +83,12 @@ public class HttpResultBuiler {
      * http返回的json格式的结果，为响应的主体结构
      * @param <T>
      */
-    public static class HttpResult<T> {
+    public static class HttpResult<T> implements Serializable {
+        @JSONField(ordinal = 0)
         Integer code;
+        @JSONField(ordinal = 1)
         String msg;
+        @JSONField(ordinal = 2)
         T data;
 
         /**

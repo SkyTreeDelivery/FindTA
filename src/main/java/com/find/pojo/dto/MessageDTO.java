@@ -1,10 +1,17 @@
 package com.find.pojo.dto;
 
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Past;
-import java.io.Serializable;
-import java.util.Date;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.Max;
+import javax.validation.constraints.NotNull;
+import java.io.Serializable;
+import java.time.LocalDateTime;
+
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class MessageDTO implements Serializable {
 
     @NotNull(message = "信息发送者id不能为空")
@@ -14,9 +21,9 @@ public class MessageDTO implements Serializable {
     private Integer acceptUserId;
 
     @NotNull(message = "查询的信息条数不能为空")
+    @Max(value = 50,message = "最大不能超过50条数据")
     private Integer messageCount;
 
     @NotNull(message = "最新被查询的时间不能为空")
-    @Past(message = "请提供合法的查询时间")
-    private Date endTime;
+    private LocalDateTime endTime;
 }

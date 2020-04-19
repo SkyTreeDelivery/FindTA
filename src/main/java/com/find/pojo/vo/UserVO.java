@@ -1,10 +1,11 @@
 package com.find.pojo.vo;
 
-import com.find.Util.Annonation.GeoField;
-import com.find.Util.Geometry.Point;
+import com.alibaba.fastjson.annotation.JSONField;
+import com.find.Util.TypeConverter.GeoCodc;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.locationtech.jts.geom.Point;
 
 @Data
 @NoArgsConstructor
@@ -18,7 +19,7 @@ public class UserVO {
     private String face_image_big;
     private String pickname;
     private String email;
-    @GeoField
+    @JSONField(serializeUsing = GeoCodc.class)
     private Point location;
     private String phone;
 }

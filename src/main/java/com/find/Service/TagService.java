@@ -1,6 +1,6 @@
 package com.find.Service;
 
-import com.find.pojo.Tag;
+import com.find.pojo.PO.Tag;
 
 import java.util.List;
 
@@ -11,6 +11,8 @@ public interface TagService {
     List<Tag> listAll();
 
     List<Tag> listTagsByTagGroup(Integer tagGroupName);
+
+    Boolean tagIsExist(Integer tagId);
 
 //    Boolean addTag(Tag tag);
 //

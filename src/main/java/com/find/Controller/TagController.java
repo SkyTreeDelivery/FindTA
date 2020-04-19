@@ -1,7 +1,7 @@
 package com.find.Controller;
 
 import com.find.Service.TagService;
-import com.find.pojo.Tag;
+import com.find.pojo.PO.Tag;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 

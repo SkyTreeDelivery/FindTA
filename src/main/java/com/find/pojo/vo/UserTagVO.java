@@ -1,5 +1,6 @@
 package com.find.pojo.vo;
 
+import com.alibaba.fastjson.annotation.JSONField;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -8,7 +9,11 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class UserTagVO {
-    private Integer userTagId;
-    private Integer groupId;
-    private String tagName;
+    @JSONField(name = "userTagId")
+    private Integer id;
+    private Integer tagId;
+
+    private String tagContext;
+    @JSONField(name = "tagGroupId")
+    private Integer tgId;
 }

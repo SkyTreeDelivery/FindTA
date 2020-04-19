@@ -50,21 +50,21 @@
 			<artifactId>spring-boot-starter-aop</artifactId>
 		</dependency>
 
-		<!--		配置解析器，用于ymal文件解析提示-->
+		<!--		yml-->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-configuration-processor</artifactId>
 			<optional>true</optional>
 		</dependency>
 
-<!--		driud-->
-		<dependency>
-			<groupId>com.alibaba</groupId>
-			<artifactId>druid-spring-boot-starter</artifactId>
-			<version>1.1.17</version>
-		</dependency>
+		<!--		driud-->
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>druid-spring-boot-starter</artifactId>
+            <version>1.1.21</version>
+        </dependency>
 
-<!--		mybatis plus spring boot starter-->
+        <!--		mybatis plus spring boot starter-->
 		<dependency>
 			<groupId>com.baomidou</groupId>
 			<artifactId>mybatis-plus-boot-starter</artifactId>
@@ -77,19 +77,11 @@
 			<artifactId>postgresql</artifactId>
 		</dependency>
 
-
-		<!--		提供postgis类型处理器支持-->
+		<!--		postgis-->
 		<dependency>
-			<groupId>com.eyougo</groupId>
-			<artifactId>mybatis-typehandlers-postgis</artifactId>
-			<version>1.0</version>
-			<exclusions>
-<!--				引入了mybatis会引发异常-->
-				<exclusion>
-						<groupId>org.mybatis</groupId>
-						<artifactId>mybatis</artifactId>
-				</exclusion>
-			</exclusions>
+			<groupId>net.postgis</groupId>
+			<artifactId>postgis-jdbc</artifactId>
+			<version>2.2.1</version>
 		</dependency>
 
 		<!--		netty-->
@@ -98,7 +90,7 @@
 			<artifactId>netty-all</artifactId>
 			<version>4.1.45.Final</version>
 		</dependency>
-		
+
 		<!--		test-->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -111,7 +103,8 @@
 				</exclusion>
 			</exclusions>
 		</dependency>
-		<!--实现springboot的热加载-->
+
+		<!--		热加载-->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-devtools</artifactId>
@@ -120,7 +113,7 @@
 		</dependency>
 
 
-<!--		lombok-->
+		<!--		lombok-->
 		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
@@ -128,19 +121,20 @@
 			<scope>provided</scope>
 		</dependency>
 
-		<!--		fastjson-->
+		<!--		fastjosn-->
 		<dependency>
 			<groupId>com.alibaba</groupId>
 			<artifactId>fastjson</artifactId>
-			<version>1.2.47</version>
+			<version>1.2.62</version>
 		</dependency>
 
-<!--		geoTools-->
+		<!--		geoTools-->
 		<dependency>
 			<groupId>org.geotools</groupId>
 			<artifactId>gt-geojson</artifactId>
 			<version>21.1</version>
 		</dependency>
+
 
 	</dependencies>
 
