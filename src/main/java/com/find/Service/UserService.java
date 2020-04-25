@@ -8,10 +8,7 @@ import com.find.pojo.dto.DtoPo.UserDTO;
 import com.find.pojo.dto.DtoPo.UserTagDTO;
 import com.find.pojo.dto.MessageDTO;
 import com.find.pojo.dto.UserLocDTO;
-import com.find.pojo.vo.FriendListVO;
-import com.find.pojo.vo.FriendRequestListVO;
-import com.find.pojo.vo.MessageVO;
-import com.find.pojo.vo.UserTagVO;
+import com.find.pojo.vo.*;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -20,15 +17,17 @@ import java.util.List;
 public interface UserService {
 
     /*====================== User ==============================*/
-    String register( UserDTO userDTO) throws CustomException;
+    UserVO register(UserDTO userDTO) throws CustomException;
 
     Boolean verifyUser(String username, String password);
 
-    String login(String username, String password, String cid) throws CustomException;
+    UserVO login(String username, String password, String cid) throws CustomException;
 
     Boolean logout(String token) throws CustomException;
 
     Boolean updateUser(User user);
+
+    Boolean uploadFaceImage(String faceImageBase64,Integer userId) throws Exception;
 
     User getUserById(Integer userId);
 

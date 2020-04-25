@@ -23,10 +23,10 @@ public abstract class AbstractGeometryTypeHandler<T extends Geometry> extends Ba
     }
 
     @Override
-    public T getNullableResult(ResultSet resultSet, String s)  {
+    public T getNullableResult(ResultSet resultSet, String columnName)  {
         try {
-            PGgeometry pGgeometry = resultSet.getObject(s,PGgeometry.class);
-            return (T) JsonUtils.postGisGeomToGeom(pGgeometry.getGeometry());
+            PGgeometry pGgeometry = (PGgeometry)resultSet.getObject(columnName);
+            return pGgeometry == null? null : (T) JsonUtils.postGisGeomToGeom(pGgeometry.getGeometry());
         }catch (Exception e){
             return null;
         }
@@ -35,8 +35,8 @@ public abstract class AbstractGeometryTypeHandler<T extends Geometry> extends Ba
     @Override
     public T getNullableResult(ResultSet resultSet, int i) {
         try {
-            PGgeometry pGgeometry = resultSet.getObject(i,PGgeometry.class);
-            return (T) JsonUtils.postGisGeomToGeom(pGgeometry.getGeometry());
+            PGgeometry pGgeometry = (PGgeometry)resultSet.getObject(i);
+            return pGgeometry == null? null : (T) JsonUtils.postGisGeomToGeom(pGgeometry.getGeometry());
         }catch (Exception e){
             return null;
         }
@@ -45,8 +45,8 @@ public abstract class AbstractGeometryTypeHandler<T extends Geometry> extends Ba
     @Override
     public T getNullableResult(CallableStatement callableStatement, int i) {
         try {
-            PGgeometry pGgeometry = callableStatement.getObject(i,PGgeometry.class);
-            return (T) JsonUtils.postGisGeomToGeom(pGgeometry.getGeometry());
+            PGgeometry pGgeometry = (PGgeometry)callableStatement.getObject(i);
+            return pGgeometry == null? null : (T) JsonUtils.postGisGeomToGeom(pGgeometry.getGeometry());
         }catch (Exception e){
             return null;
         }

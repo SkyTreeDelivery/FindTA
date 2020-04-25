@@ -28,15 +28,10 @@ public class CustomExceptionHandler {
             response.setStatus(HttpResponseEnum.OK.code);
             response.setCharacterEncoding("utf-8");
             CustomException e = (CustomException) ex;
-            if(e.getMsg() == null){
-                return HttpResultBuiler.exception(e.getCostomErrorCodeEnum());
-            }else{
-                return HttpResultBuiler.exception(e.getCostomErrorCodeEnum(),e.getMsg());
-            }
+            return HttpResultBuiler.exception(e);
         }else{                                 //处理其他错误，默认为系统错误500
             response.setStatus(HttpResponseEnum.INTERNAL_SERVER_ERROR.code);
             response.setCharacterEncoding("utf-8");
-//            return HttpResultBuiler.error500();
             return HttpResultBuiler.error500(ex.getMessage());
         }
     }

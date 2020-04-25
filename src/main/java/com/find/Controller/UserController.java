@@ -9,12 +9,12 @@ import com.find.Util.Exception.CustomException;
 import com.find.Util.Utils.BeanArrayUtils;
 import com.find.Util.Utils.StringUtils;
 import com.find.Util.Utils.ValidateUtils;
-import com.find.pojo.po.*;
 import com.find.pojo.dto.DtoPo.FriendRequestDTO;
 import com.find.pojo.dto.DtoPo.UserDTO;
 import com.find.pojo.dto.DtoPo.UserTagDTO;
 import com.find.pojo.dto.MessageDTO;
 import com.find.pojo.dto.UserLocDTO;
+import com.find.pojo.po.*;
 import com.find.pojo.vo.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
@@ -22,9 +22,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @RequestMapping("/user/*")
 @RestController
@@ -37,28 +35,25 @@ public class UserController {
     private TagService tagService;
 
     @RequestMapping("register")
-    public Map<String, String> register(@Valid UserDTO userDTO, BindingResult bindingResult) throws Exception {
+    public UserVO register(@Valid UserDTO userDTO, BindingResult bindingResult) throws Exception {
         //1. 判断必要参数，如缺失则结束
         ValidateUtils.handlerValidateResult(bindingResult);
-        String token = userService.register(userDTO);
-        Map<String, String> tokenMap = new HashMap<>();
-        tokenMap.put("token",token);
-        return tokenMap;
+        UserVO userVo = userService.register(userDTO);
+        return userVo;
     }
 
 
     @RequestMapping("login")
-    public Map<String, String> loginUser(String username, String password, String cid) throws CustomException {
+    public UserVO loginUser(String username, String password, String cid) throws CustomException {
 //        1. 判断参数
         if(StringUtils.isBlank(username)
                 || StringUtils.isBlank(password)
                 || StringUtils.isBlank(cid)){
-            throw new CustomException(CustomErrorCodeEnum.PARAM_VERIFY_ERROR);
+            throw new CustomException(CustomErrorCodeEnum.PARAM_VERIFY_ERROR
+                    ,"username、password、cid均不能为空（不前不对cid做检测，仅判空）");
         }
-        String token = userService.login(username,password,cid);
-        Map<String, String> tokenMap = new HashMap<>();
-        tokenMap.put("token",token);
-        return tokenMap;
+        UserVO userVo = userService.login(username,password,cid);
+        return userVo;
     }
 
     @RequestMapping("logout")
@@ -70,7 +65,8 @@ public class UserController {
     @RequestMapping("updateUserInfo")
     public Boolean updateUserInfo(User user) throws CustomException {
         if(user.getId() == null ){
-            throw new CustomException(CustomErrorCodeEnum.PARAM_VERIFY_ERROR);
+            throw new CustomException(CustomErrorCodeEnum.PARAM_VERIFY_ERROR
+                    ,"userId不能为空");
         }
         if(!userService.userIsExist(user.getId())){
             throw new CustomException(CustomErrorCodeEnum.USER_NOT_EXIST);
@@ -80,10 +76,33 @@ public class UserController {
         return result;
     }
 
+    @RequestMapping("uploadFaceImage")
+    public UserVO uploadFaceImage(String faceImageBase64, Integer userId) throws Exception {
+        if(!faceImageBase64.contains("base64,")){
+            throw new CustomException(CustomErrorCodeEnum.PARAM_VERIFY_ERROR
+                    , "faceImage64字符串没有指定编码格式，要指定前缀，如data:image/png;base64,");
+        }
+        if(userId == null ){
+            throw new CustomException(CustomErrorCodeEnum.PARAM_VERIFY_ERROR,"userId 不能为空");
+        }
+        if(!userService.userIsExist(userId)){
+            throw new CustomException(CustomErrorCodeEnum.USER_NOT_EXIST);
+        }
+
+        Boolean result = userService.uploadFaceImage(faceImageBase64, userId);
+        if(result == null){
+            return null;
+        }
+        User user = userService.getUserById(userId);
+        UserVO userVO = BeanArrayUtils.copyProperties(user, UserVO.class);
+        return userVO;
+    }
+
     @RequestMapping("queryUserById")
     public User queryUserById(Integer userId) throws CustomException {
         if(userId == null ){
-            throw new CustomException(CustomErrorCodeEnum.PARAM_VERIFY_ERROR);
+            throw new CustomException(CustomErrorCodeEnum.PARAM_VERIFY_ERROR
+                    ,"userId不能为空");
         }
         if(!userService.userIsExist(userId)){
             throw new CustomException(CustomErrorCodeEnum.USER_NOT_EXIST);
@@ -94,7 +113,8 @@ public class UserController {
     @RequestMapping("queryUsersByNickName")
     public List<UserSearchVO> queryUsersByNickName(String nickname ) throws Exception {
         if(StringUtils.isBlank(nickname)){
-            throw new CustomException(CustomErrorCodeEnum.PARAM_VERIFY_ERROR);
+            throw new CustomException(CustomErrorCodeEnum.PARAM_VERIFY_ERROR
+                    ,"nickname不能为空");
         }
         List<User> users = userService.listUsersByNickname(nickname);
         List<UserSearchVO> userVOs = BeanArrayUtils.copyListProperties(users,UserSearchVO.class);
@@ -113,7 +133,8 @@ public class UserController {
     @RequestMapping("queryUsersByTags")
     public List<UserSearchVO> queryUsersByTag(Integer tagId) throws Exception {
         if(tagId == null){
-            throw new CustomException(CustomErrorCodeEnum.PARAM_VERIFY_ERROR);
+            throw new CustomException(CustomErrorCodeEnum.PARAM_VERIFY_ERROR
+                    ,"tagId不能为空");
         }
         List<User> users = userService.listUsersByTagId(tagId);
         List<UserSearchVO> userVOs = BeanArrayUtils.copyListProperties(users,UserSearchVO.class);
@@ -136,7 +157,8 @@ public class UserController {
     @RequestMapping("queryFriendRequestById")
     public FriendRequest queryFriendRequestById(Integer friendRequestId) throws CustomException {
         if(friendRequestId == null ){
-            throw new CustomException(CustomErrorCodeEnum.PARAM_VERIFY_ERROR);
+            throw new CustomException(CustomErrorCodeEnum.PARAM_VERIFY_ERROR
+                    ,"friendRequestId不能为空");
         }
         if(!userService.friendRequestIsExist(friendRequestId)){
             throw new CustomException(CustomErrorCodeEnum.FRIEND_REQUEST_NOT_EXIST);
@@ -147,7 +169,8 @@ public class UserController {
     @RequestMapping("queryFriendRequests")
     public List<FriendRequestListVO> queryFriendRequests(Integer userId) throws Exception {
         if(userId == null){
-            throw new CustomException(CustomErrorCodeEnum.PARAM_VERIFY_ERROR);
+            throw new CustomException(CustomErrorCodeEnum.PARAM_VERIFY_ERROR
+                    ,"userId不能为空");
         }
         if(!userService.userIsExist(userId)){
             throw new CustomException(CustomErrorCodeEnum.USER_NOT_EXIST);
@@ -160,7 +183,8 @@ public class UserController {
     public Boolean handleFriendRequest
             (Integer friendRequestId, FriendRequestHandleEnum reply) throws Exception {
         if(friendRequestId == null || reply == null){
-            throw new CustomException(CustomErrorCodeEnum.PARAM_VERIFY_ERROR);
+            throw new CustomException(CustomErrorCodeEnum.PARAM_VERIFY_ERROR
+                    ,"friendRequestId、reply均不能为空");
         }
         Boolean result = userService.handleFriendRequest(friendRequestId, reply);
         return result;
@@ -171,7 +195,8 @@ public class UserController {
     @RequestMapping("queryFriendById")
     public Friend queryFriendById(Integer friendId) throws CustomException {
         if(friendId == null ){
-            throw new CustomException(CustomErrorCodeEnum.PARAM_VERIFY_ERROR);
+            throw new CustomException(CustomErrorCodeEnum.PARAM_VERIFY_ERROR
+                    ,"friendId不能为空");
         }
         if(!userService.friendIsExist(friendId)){
             throw new CustomException(CustomErrorCodeEnum.NO_FRINEND_RELATION);
@@ -183,7 +208,8 @@ public class UserController {
     @RequestMapping("queryFriends")
     public List<FriendListVO> queryFriends(Integer userId) throws Exception {
         if(userId == null){
-            throw new CustomException(CustomErrorCodeEnum.PARAM_VERIFY_ERROR);
+            throw new CustomException(CustomErrorCodeEnum.PARAM_VERIFY_ERROR
+                    ,"userId不能为空");
         }
         List<FriendListVO> friendList = userService.listFriendsByUserId(userId);
         return friendList;
@@ -193,7 +219,8 @@ public class UserController {
     public Boolean deleteFriend
             (Integer myId, Integer friendId) throws Exception {
         if(myId == null || friendId == null){
-            throw new CustomException(CustomErrorCodeEnum.PARAM_VERIFY_ERROR);
+            throw new CustomException(CustomErrorCodeEnum.PARAM_VERIFY_ERROR
+                    ,"myId、friendId均不能为空");
         }
         if(!userService.userIsExist(myId)|| !userService.userIsExist(friendId)){
             throw new CustomException(CustomErrorCodeEnum.USER_NOT_EXIST);
@@ -207,7 +234,8 @@ public class UserController {
     @RequestMapping("queryMessageById")
     public Message queryMessageById(Integer messageId) throws CustomException {
         if(messageId == null ){
-            throw new CustomException(CustomErrorCodeEnum.PARAM_VERIFY_ERROR);
+            throw new CustomException(CustomErrorCodeEnum.PARAM_VERIFY_ERROR
+                    ,"messageId不能为空");
         }
         if(!userService.messageIsExist(messageId)){
             throw new CustomException(CustomErrorCodeEnum.NO_MESSAGE);
@@ -228,7 +256,8 @@ public class UserController {
     @RequestMapping("signAlldMessage")
     public Boolean signAllUnSignedMessage(Integer userId) throws CustomException {
         if(userId == null ){
-            throw new CustomException(CustomErrorCodeEnum.PARAM_VERIFY_ERROR);
+            throw new CustomException(CustomErrorCodeEnum.PARAM_VERIFY_ERROR
+                    ,"userId不能为空");
         }
         if(!userService.userIsExist(userId)){
             throw new CustomException(CustomErrorCodeEnum.USER_NOT_EXIST);
@@ -251,7 +280,8 @@ public class UserController {
     @RequestMapping("queryUserTagById")
     public UserTag queryUserTagById(Integer userTagId) throws CustomException {
         if(userTagId == null ){
-            throw new CustomException(CustomErrorCodeEnum.PARAM_VERIFY_ERROR);
+            throw new CustomException(CustomErrorCodeEnum.PARAM_VERIFY_ERROR
+                    ,"userTagId不能为空");
         }
         if(!userService.userTagIsExist(userTagId)){
             throw new CustomException(CustomErrorCodeEnum.NO_USER_TAG);
@@ -262,7 +292,8 @@ public class UserController {
     @RequestMapping("queryTagsByUserid")
     public List<UserTagVO> queryTagsByUserid(Integer userId) throws CustomException {
         if(userId == null){
-            throw new CustomException(CustomErrorCodeEnum.PARAM_VERIFY_ERROR);
+            throw new CustomException(CustomErrorCodeEnum.PARAM_VERIFY_ERROR
+                    ,"userId不能为空");
         }
         List<UserTagVO> tags = userService.listTagsByUserId(userId);
         return tags;
@@ -271,7 +302,8 @@ public class UserController {
     @RequestMapping("deleteUserTag")
     public Boolean deleteUserTag(Integer userTagId) throws CustomException {
         if(userTagId == null){
-            throw new CustomException(CustomErrorCodeEnum.PARAM_VERIFY_ERROR);
+            throw new CustomException(CustomErrorCodeEnum.PARAM_VERIFY_ERROR
+                    ,"userTagId不能为空");
         }
         Boolean result = userService.removeUserTagById(userTagId);
         return result;

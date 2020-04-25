@@ -6,27 +6,23 @@ import com.find.Util.Enum.EnumImp.ControlEnum.FriendRequestHandleEnum;
 import com.find.Util.Enum.EnumImp.CustomErrorCodeEnum;
 import com.find.Util.Enum.EnumImp.POJOEnum.SignStatusEnum;
 import com.find.Util.Exception.CustomException;
-import com.find.Util.Utils.BeanArrayUtils;
-import com.find.Util.Utils.MD5Util;
-import com.find.Util.Utils.StringUtils;
-import com.find.Util.Utils.ValidateUtils;
+import com.find.Util.Utils.*;
 import com.find.mapper.*;
-import com.find.pojo.po.*;
 import com.find.pojo.dto.DtoPo.FriendRequestDTO;
 import com.find.pojo.dto.DtoPo.UserDTO;
 import com.find.pojo.dto.DtoPo.UserTagDTO;
 import com.find.pojo.dto.MessageDTO;
 import com.find.pojo.dto.UserLocDTO;
-import com.find.pojo.vo.FriendListVO;
-import com.find.pojo.vo.FriendRequestListVO;
-import com.find.pojo.vo.MessageVO;
-import com.find.pojo.vo.UserTagVO;
+import com.find.pojo.po.*;
+import com.find.pojo.vo.*;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
+import java.io.File;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -56,9 +52,12 @@ public class UserServiceImp implements UserService {
     @Resource
     ChatPartMapper chatPartMapper;
 
+    @Resource
+    FastDFSClient fastDFSClient;
+
     @Override
     @Transactional(propagation = Propagation.REQUIRED)
-    public String register(UserDTO userDTO) throws CustomException {
+    public UserVO register(UserDTO userDTO) throws CustomException {
         //2. 如果username，email已被注册，则提示已占用
         if(usernameIsExist(userDTO.getUsername())
                 ||emailIsExist(userDTO.getEmail())){
@@ -70,11 +69,10 @@ public class UserServiceImp implements UserService {
         String token = getUniToken();
         user.setToken(token);
         user.setPassword(MD5Util.getMD5Str(user.getPassword()));
-        int insert = userMapper.insert(user);
-        if(insert == 1){
-            return token;
-        }
-        return null;
+        userMapper.insert(user);
+        User newUser = getUserByUsername(user.getUsername());
+        UserVO userVO = BeanArrayUtils.copyProperties(newUser, UserVO.class);
+        return userVO;
     }
 
     private String getUniToken(){
@@ -96,7 +94,7 @@ public class UserServiceImp implements UserService {
 
     @Override
     @Transactional(propagation = Propagation.SUPPORTS)
-    public String login(String username, String password, String cid) throws CustomException {
+    public UserVO login(String username, String password, String cid) throws CustomException {
 //        2. 验证用户
         Boolean result = verifyUser(username, password);
         if(!result){
@@ -109,11 +107,13 @@ public class UserServiceImp implements UserService {
         updateUser.setId(userinfo.getId());
         updateUser.setToken(token);
         updateUser.setCid(userinfo.getCid());
-        Boolean r2 = updateUser(updateUser);
+        updateUser(updateUser);
         if(!cid.equals(userinfo.getCid())){
             //TODO 通知原来登录的设备下线
         }
-        return r2 ? token: null;
+        User newUser = getUserByUsername(username);
+        UserVO userVO = BeanArrayUtils.copyProperties(newUser, UserVO.class);
+        return userVO;
     }
 
     @Override
@@ -139,6 +139,43 @@ public class UserServiceImp implements UserService {
         }
 
         return userMapper.updateById(user) == 1;
+    }
+
+    @Override
+    public Boolean uploadFaceImage(String faceImageBase64, Integer userId) throws Exception {
+        String tempDir =  "c:/" + "temp";
+        String tempFaceImagePath = tempDir + "/" + userId + "_faceImage.png";
+        File dir = new File(tempDir);
+        if(!dir.exists()){
+            dir.mkdir();
+        }
+        FileUtils.base64ToFile(tempFaceImagePath,faceImageBase64);
+
+        MultipartFile faceImageMultiPart = FileUtils.fileToMultipart(tempFaceImagePath);
+        if(faceImageMultiPart == null){
+            return false;
+        }
+        String url = fastDFSClient.uploadBase64(faceImageMultiPart);
+        System.out.println(url);
+//        String thump = "_80x80.";
+//        String[] arr = url.split("\\.");
+//        String thumpImgUrl = arr[0] + thump + arr[1];
+        int width = 80;
+        int height = 80;
+        String thumbnailPath = "c:/temp/"+ userId + "_faceImage_"+ width + "x" + height + ".png";
+        ImageUtils.genarateThumbnails(tempFaceImagePath,width,height,thumbnailPath);
+
+        MultipartFile faceImageThunbnailMultiPart = FileUtils.fileToMultipart(thumbnailPath);
+        if(faceImageThunbnailMultiPart == null){
+            return false;
+        }
+        String url_thumb = fastDFSClient.uploadBase64(faceImageThunbnailMultiPart);
+
+        User user = new User();
+        user.setId(userId);
+        user.setFace_image(url_thumb);
+        user.setFace_image_big(url);
+        return updateUser(user);
     }
 
     @Override

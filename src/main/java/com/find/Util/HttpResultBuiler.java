@@ -2,8 +2,8 @@ package com.find.Util;
 
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.annotation.JSONField;
-import com.find.Util.Enum.EnumImp.CustomErrorCodeEnum;
 import com.find.Util.Enum.EnumImp.HttpResponseEnum;
+import com.find.Util.Exception.CustomException;
 
 import java.io.Serializable;
 
@@ -66,14 +66,8 @@ public class HttpResultBuiler {
     /*=============================== 自定义异常处理 ===================================*/
     /*-------------------------------- exception ----------------------------------------------*/
 
-    public static <T> HttpResult<T> exception(CustomErrorCodeEnum status){
-        return new HttpResult<T>(status.code, status.msg, null);
-    }
-
-
-    public static <T> HttpResult<T> exception(CustomErrorCodeEnum status, String msg){
-        //msg是在调用时额外添加的信息
-        return new HttpResult<T>(status.code, status.msg + " : " + msg,null);
+    public static <T> HttpResult<T> exception(CustomException ex){
+        return new HttpResult<T>(ex.getCostomErrorCodeEnum().code,ex.getMessage(), null);
     }
 
 

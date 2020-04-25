@@ -97,8 +97,8 @@ public class CreateAndModifyTimeAdvice {
             return pjp.proceed();
         }
         Object arg = args[0];
-        Method setGmtCreated = arg.getClass().getMethod("setGmtCreated",LocalDateTime.class);
-        setGmtCreated.invoke(arg, null);
+//        Method setGmtCreated = arg.getClass().getMethod("setGmtCreated",LocalDateTime.class);
+//        setGmtCreated.invoke(arg, null);
         Method setGmtModified = arg.getClass().getMethod("setGmtModified",LocalDateTime.class);
         setGmtModified.invoke(arg, LocalDateTime.now());
         return pjp.proceed();

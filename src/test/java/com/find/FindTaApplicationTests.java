@@ -8,12 +8,17 @@ import com.find.Util.Utils.JsonUtils;
 import com.find.Util.Utils.StringUtils;
 import com.find.Util.Utils.ValidateUtils;
 import com.find.mapper.UserMapper;
+import com.find.pojo.dto.DtoPo.UserDTO;
 import com.find.pojo.po.Message;
 import com.find.pojo.po.User;
-import com.find.pojo.dto.DtoPo.UserDTO;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.util.Base64Utils;
+import sun.misc.BASE64Encoder;
 
+import java.io.FileInputStream;
+import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
@@ -22,7 +27,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
-//@SpringBootTest
+@SpringBootTest
 class FindTaApplicationTests {
 
 	@Autowired
@@ -35,14 +40,14 @@ class FindTaApplicationTests {
 	@Test
 	void contextLoads() {
 		User user = new User();
-		user.setUsername("zhang54");
+		user.setUsername("zhang99");
 		user.setPassword("zhang002508");
 		user.setAge(50);
-		user.setEmail("zhang11375154@sina.com");
+		user.setEmail("zhang11375199@sina.com");
 		user.setGender(GenderEnum.MAN.code);
-		user.setNickname("测试54");
+		user.setNickname("测试99");
 		user.setCid(UUID.randomUUID().toString());
-		user.setPhone("15555555558");
+		user.setPhone("15555555599");
 		user.setGmtCreated(LocalDateTime.now());
 		user.setGmtModified(LocalDateTime.now());
 		user.setLocation(null);
@@ -154,5 +159,45 @@ class FindTaApplicationTests {
 		user.setCid(UUID.randomUUID().toString());
 		user.setPhone("15555555565");
 		ValidateUtils.validObj(user);
+	}
+
+	@Test
+	public void testN() throws Exception {
+		String url = "D:\\我的用户\\新建文件夹\\QQ图片20200313213824.jpg";
+        byte[] bytes = null;
+        try(InputStream in = new FileInputStream(url);) {
+            bytes = new byte[in.available()];
+            in.read(bytes);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+		BASE64Encoder encoder = new BASE64Encoder();
+	// 通过base64来转化图片
+		String data = encoder.encode(bytes);
+		data = "base64," + data;
+        userService.uploadFaceImage(data,1);
+    }
+
+    @Test
+	public void testP() throws CustomException {
+//		String login = userService.login("zhang54", "zhang002508", "d23f8884-7f12-4cc6-b158-dc9883a75f53");
+	}
+
+	@Test
+	public void testT(){
+		String url = "D:\\我的用户\\新建文件夹\\QQ图片20200313213824.jpg";
+		byte[] bytes = null;
+		try(InputStream in = new FileInputStream(url);) {
+			bytes = new byte[in.available()];
+			in.read(bytes);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		BASE64Encoder encoder = new BASE64Encoder();
+		// 通过base64来转化图片
+		String data = encoder.encode(bytes);
+		System.out.println("data : " + data);
+		String s = Base64Utils.encodeToString(bytes);
+		System.out.println("baseUtils : " + s);
 	}
 }

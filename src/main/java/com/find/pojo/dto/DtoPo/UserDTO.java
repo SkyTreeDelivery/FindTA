@@ -31,10 +31,6 @@ public class UserDTO  implements Serializable {
     @NotNull(message = "gender不能为空")
     private Integer gender;
 
-    private String face_image;
-
-    private String face_image_big;
-
     @NotNull(message = "nickname不能为空")
     @Size(max = 16,message = "nickname最大为16个字符")
     private String nickname;
