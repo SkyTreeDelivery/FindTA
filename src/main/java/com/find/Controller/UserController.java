@@ -22,7 +22,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RequestMapping("/user/*")
 @RestController
@@ -35,16 +37,19 @@ public class UserController {
     private TagService tagService;
 
     @RequestMapping("register")
-    public UserVO register(@Valid UserDTO userDTO, BindingResult bindingResult) throws Exception {
+    public Map<String,Object> register(@Valid UserDTO userDTO, BindingResult bindingResult) throws Exception {
         //1. 判断必要参数，如缺失则结束
         ValidateUtils.handlerValidateResult(bindingResult);
-        UserVO userVo = userService.register(userDTO);
-        return userVo;
+        User user = userService.register(userDTO);
+        Map<String,Object> resultMap = new HashMap<>();
+        resultMap.put("token",user.getToken());
+        resultMap.put("user",BeanArrayUtils.copyProperties(user,UserVO.class));
+        return resultMap;
     }
 
 
     @RequestMapping("login")
-    public UserVO loginUser(String username, String password, String cid) throws CustomException {
+    public Map<String,Object> loginUser(String username, String password, String cid) throws CustomException {
 //        1. 判断参数
         if(StringUtils.isBlank(username)
                 || StringUtils.isBlank(password)
@@ -52,8 +57,11 @@ public class UserController {
             throw new CustomException(CustomErrorCodeEnum.PARAM_VERIFY_ERROR
                     ,"username、password、cid均不能为空（不前不对cid做检测，仅判空）");
         }
-        UserVO userVo = userService.login(username,password,cid);
-        return userVo;
+        User user = userService.login(username,password,cid);
+        Map<String,Object> resultMap = new HashMap<>();
+        resultMap.put("token",user.getToken());
+        resultMap.put("user",BeanArrayUtils.copyProperties(user,UserVO.class));
+        return resultMap;
     }
 
     @RequestMapping("logout")

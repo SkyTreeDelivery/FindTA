@@ -163,7 +163,7 @@ class FindTaApplicationTests {
 
 	@Test
 	public void testN() throws Exception {
-		String url = "D:\\我的用户\\新建文件夹\\QQ图片20200313213824.jpg";
+		String url = "D:\\我的用户\\新建文件夹\\526.jpg";
         byte[] bytes = null;
         try(InputStream in = new FileInputStream(url);) {
             bytes = new byte[in.available()];

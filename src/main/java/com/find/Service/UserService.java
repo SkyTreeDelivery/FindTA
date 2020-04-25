@@ -17,11 +17,11 @@ import java.util.List;
 public interface UserService {
 
     /*====================== User ==============================*/
-    UserVO register(UserDTO userDTO) throws CustomException;
+    User register(UserDTO userDTO) throws CustomException;
 
     Boolean verifyUser(String username, String password);
 
-    UserVO login(String username, String password, String cid) throws CustomException;
+    User login(String username, String password, String cid) throws CustomException;
 
     Boolean logout(String token) throws CustomException;
 

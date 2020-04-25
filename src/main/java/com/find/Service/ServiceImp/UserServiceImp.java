@@ -57,7 +57,7 @@ public class UserServiceImp implements UserService {
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED)
-    public UserVO register(UserDTO userDTO) throws CustomException {
+    public User register(UserDTO userDTO) throws CustomException {
         //2. 如果username，email已被注册，则提示已占用
         if(usernameIsExist(userDTO.getUsername())
                 ||emailIsExist(userDTO.getEmail())){
@@ -71,8 +71,7 @@ public class UserServiceImp implements UserService {
         user.setPassword(MD5Util.getMD5Str(user.getPassword()));
         userMapper.insert(user);
         User newUser = getUserByUsername(user.getUsername());
-        UserVO userVO = BeanArrayUtils.copyProperties(newUser, UserVO.class);
-        return userVO;
+        return newUser;
     }
 
     private String getUniToken(){
@@ -94,7 +93,7 @@ public class UserServiceImp implements UserService {
 
     @Override
     @Transactional(propagation = Propagation.SUPPORTS)
-    public UserVO login(String username, String password, String cid) throws CustomException {
+    public User login(String username, String password, String cid) throws CustomException {
 //        2. 验证用户
         Boolean result = verifyUser(username, password);
         if(!result){
@@ -112,8 +111,7 @@ public class UserServiceImp implements UserService {
             //TODO 通知原来登录的设备下线
         }
         User newUser = getUserByUsername(username);
-        UserVO userVO = BeanArrayUtils.copyProperties(newUser, UserVO.class);
-        return userVO;
+        return newUser;
     }
 
     @Override
@@ -142,7 +140,9 @@ public class UserServiceImp implements UserService {
     }
 
     @Override
+    @Transactional(propagation = Propagation.SUPPORTS)
     public Boolean uploadFaceImage(String faceImageBase64, Integer userId) throws Exception {
+        String groupName = "findTA";
         String tempDir =  "c:/" + "temp";
         String tempFaceImagePath = tempDir + "/" + userId + "_faceImage.png";
         File dir = new File(tempDir);
@@ -156,6 +156,8 @@ public class UserServiceImp implements UserService {
             return false;
         }
         String url = fastDFSClient.uploadBase64(faceImageMultiPart);
+        url = groupName + "/" + url;
+
         System.out.println(url);
 //        String thump = "_80x80.";
 //        String[] arr = url.split("\\.");
@@ -170,6 +172,7 @@ public class UserServiceImp implements UserService {
             return false;
         }
         String url_thumb = fastDFSClient.uploadBase64(faceImageThunbnailMultiPart);
+        url_thumb = groupName + "/" + url_thumb;
 
         User user = new User();
         user.setId(userId);
