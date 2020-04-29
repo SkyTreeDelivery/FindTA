@@ -16,6 +16,8 @@ import com.find.pojo.dto.MessageDTO;
 import com.find.pojo.dto.UserLocDTO;
 import com.find.pojo.po.*;
 import com.find.pojo.vo.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -29,6 +31,8 @@ import java.util.Map;
 @RequestMapping("/user/*")
 @RestController
 public class UserController {
+
+    private static final Logger logger = LoggerFactory.getLogger(UserController.class);
 
     @Autowired
     private UserService userService;
@@ -118,7 +122,7 @@ public class UserController {
         return userService.getUserById(userId);
     }
 
-    @RequestMapping("queryUsersByNickName")
+    @RequestMapping("queryUsersByNickname")
     public List<UserSearchVO> queryUsersByNickName(String nickname ) throws Exception {
         if(StringUtils.isBlank(nickname)){
             throw new CustomException(CustomErrorCodeEnum.PARAM_VERIFY_ERROR
@@ -133,9 +137,8 @@ public class UserController {
     public List<UserSearchVO> queryUsersByLoc
             (@Valid UserLocDTO userLocDTO,BindingResult bindingResult ) throws Exception {
         ValidateUtils.handlerValidateResult(bindingResult);
-        List<User> users = userService.listUsersByLoc(userLocDTO);
-        List<UserSearchVO> userVOs = BeanArrayUtils.copyListProperties(users,UserSearchVO.class);
-        return userVOs;
+        List<UserSearchVO> users = userService.listUsersByLoc(userLocDTO);
+        return users;
     }
 
     @RequestMapping("queryUsersByTags")
@@ -193,6 +196,9 @@ public class UserController {
         if(friendRequestId == null || reply == null){
             throw new CustomException(CustomErrorCodeEnum.PARAM_VERIFY_ERROR
                     ,"friendRequestId、reply均不能为空");
+        }
+        if(!userService.friendRequestIsExist(friendRequestId)){
+            throw new CustomException(CustomErrorCodeEnum.FRIEND_REQUEST_NOT_EXIST);
         }
         Boolean result = userService.handleFriendRequest(friendRequestId, reply);
         return result;

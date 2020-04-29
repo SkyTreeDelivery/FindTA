@@ -8,7 +8,6 @@ import org.geotools.geojson.geom.GeometryJSON;
 import org.locationtech.jts.geom.Geometry;
 import org.locationtech.jts.io.ParseException;
 import org.locationtech.jts.io.WKTReader;
-import org.postgis.Point;
 
 import java.io.IOException;
 import java.io.Reader;
@@ -94,13 +93,13 @@ public class JsonUtils {
     }
 
 
-    public static org.postgis.Geometry geomToPostGisGeom(Geometry geometry){
+    public static org.postgis.Geometry geomToPostGisGeom(org.locationtech.jts.geom.Geometry geometry){
         if(geometry != null){
             String geometryType = geometry.getGeometryType();
             switch (geometryType){
                 case "Point":
-                    Point point = new Point();
-                    point.innerWKT(new StringBuffer(geomToWkt(geometry)));
+                    org.locationtech.jts.geom.Point oriPoint = (org.locationtech.jts.geom.Point)geometry;
+                    org.postgis.Point point = new org.postgis.Point(oriPoint.getX(),oriPoint.getY());
                     return point;
             }
             return null;

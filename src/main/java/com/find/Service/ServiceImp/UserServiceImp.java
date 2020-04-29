@@ -23,6 +23,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -30,6 +31,9 @@ import java.util.stream.Collectors;
 
 @Service
 public class UserServiceImp implements UserService {
+
+
+//    private static final Logger logger = LoggerFactory.getLogger(UserServiceImp.class);
 
     @Resource
     UserMapper userMapper;
@@ -135,7 +139,6 @@ public class UserServiceImp implements UserService {
         if(user.getPassword() != null){
             user.setPassword(MD5Util.getMD5Str(user.getPassword()));
         }
-
         return userMapper.updateById(user) == 1;
     }
 
@@ -153,9 +156,12 @@ public class UserServiceImp implements UserService {
 
         MultipartFile faceImageMultiPart = FileUtils.fileToMultipart(tempFaceImagePath);
         if(faceImageMultiPart == null){
-            return false;
+            throw new CustomException(CustomErrorCodeEnum.FACE_IMAGE_UPLOAD_ERROR,"临时原图照片文件读取失败");
         }
         String url = fastDFSClient.uploadBase64(faceImageMultiPart);
+        if(url == null){
+            throw new CustomException(CustomErrorCodeEnum.FACE_IMAGE_UPLOAD_ERROR,"原图上传失败");
+        }
         url = groupName + "/" + url;
 
         System.out.println(url);
@@ -169,22 +175,27 @@ public class UserServiceImp implements UserService {
 
         MultipartFile faceImageThunbnailMultiPart = FileUtils.fileToMultipart(thumbnailPath);
         if(faceImageThunbnailMultiPart == null){
-            return false;
+            throw new CustomException(CustomErrorCodeEnum.FACE_IMAGE_UPLOAD_ERROR,"临时缩略图照片文件读取失败");
         }
         String url_thumb = fastDFSClient.uploadBase64(faceImageThunbnailMultiPart);
+        if(url_thumb == null){
+            throw new CustomException(CustomErrorCodeEnum.FACE_IMAGE_UPLOAD_ERROR,"缩略图上传失败");
+        }
         url_thumb = groupName + "/" + url_thumb;
 
         User user = new User();
         user.setId(userId);
-        user.setFace_image(url_thumb);
-        user.setFace_image_big(url);
+        user.setFaceImage(url_thumb);
+        user.setFaceImageBig(url);
+
         return updateUser(user);
     }
 
     @Override
     @Transactional(propagation = Propagation.SUPPORTS)
     public User getUserById(Integer userId) {
-        return userMapper.selectById(userId);
+        User user = userMapper.selectById(userId);
+        return user;
     }
 
     @Override
@@ -221,7 +232,8 @@ public class UserServiceImp implements UserService {
 
     @Override
     @Transactional(propagation = Propagation.SUPPORTS)
-    public List<User> listUsersByLoc(UserLocDTO userLocDTO) {
+    public List<UserSearchVO> listUsersByLoc(UserLocDTO userLocDTO) {
+//        System.out.println("查询条件" + userLocDTO);
         return userMapper.listUserByLoc(userLocDTO);
     }
 
@@ -296,7 +308,7 @@ public class UserServiceImp implements UserService {
         wrapper.eq("my_id",userId);
         List<Friend> friends = friendMapper.selectList(wrapper);
         if(friends.size() == 0){
-            return null;
+            return new ArrayList<FriendListVO>();
         }
         List<FriendListVO> friendListVOS = BeanArrayUtils.copyListProperties(friends, FriendListVO.class);
 
@@ -554,15 +566,17 @@ public class UserServiceImp implements UserService {
     @Override
     @Transactional(propagation = Propagation.SUPPORTS)
     public List<FriendRequestListVO> listFriendRequestsByUserId(Integer userId) throws Exception{
+        //查询用户的所有好友请求关系
         QueryWrapper<FriendRequest> wrapper = new QueryWrapper<>();
-        wrapper.eq("accept_user_id",userId);
+        wrapper.eq("send_user_id",userId);
         List<FriendRequest> friendRequests = requestMapper.selectList(wrapper);
         if(friendRequests.size() == 0){
-            return null;
+            return new ArrayList<FriendRequestListVO>();
         }
         List<FriendRequestListVO> friendRequestListVOList
                 = BeanArrayUtils.copyListProperties(friendRequests, FriendRequestListVO.class);
 
+        //查询好友请求列表中的用户数据
         List<Integer> sendUserIds = friendRequests.stream()
                 .map(FriendRequest::getSendUserId)
                 .collect(Collectors.toList());
@@ -573,9 +587,11 @@ public class UserServiceImp implements UserService {
         Map<Integer, User> idUserMap = users.stream()
                 .collect(Collectors.toMap((e) -> e.getId(), (e) -> e));
         assert friendRequestListVOList != null;
+
+//        整合数据
         for (FriendRequestListVO friendRequestListVO : friendRequestListVOList) {
             User user = idUserMap.get(friendRequestListVO.getSendUserId());
-            BeanUtils.copyProperties(user,friendRequestListVO);
+            BeanUtils.copyProperties(user,friendRequestListVO,"id");
         }
         return friendRequestListVOList;
     }
@@ -642,6 +658,9 @@ public class UserServiceImp implements UserService {
         QueryWrapper<UserTag> wrapper = new QueryWrapper<>();
         wrapper.eq("user_id",userId);
         List<UserTag> userTags = userTagMapper.selectList(wrapper);
+        if(userTags.size() == 0){
+            return new ArrayList<UserTagVO>();
+        }
         List<UserTagVO> userTagVOS = BeanArrayUtils.copyListProperties(userTags, UserTagVO.class);
         List<Integer> tagIds = userTags.stream()
                 .map(UserTag::getTagId)
@@ -655,7 +674,7 @@ public class UserServiceImp implements UserService {
         assert userTagVOS != null;
         for (UserTagVO userTagVO : userTagVOS) {
             Tag tag = idTagMap.get(userTagVO.getTagId());
-            BeanUtils.copyProperties(tag,userTagVO);
+            BeanUtils.copyProperties(tag,userTagVO,"id");
         }
         return userTagVOS;
     }

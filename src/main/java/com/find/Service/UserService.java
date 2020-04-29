@@ -39,7 +39,7 @@ public interface UserService {
 
     List<User> listUsersByNickname(String nickname);
 
-    List<User> listUsersByLoc(UserLocDTO userLocDTO);
+    List<UserSearchVO> listUsersByLoc(UserLocDTO userLocDTO);
 
     List<User> listUsersByTagId(Integer tagId);
 

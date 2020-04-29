@@ -27,9 +27,9 @@ public class User implements Serializable {
 
     private Integer gender;
 
-    private String face_image;
+    private String faceImage;
 
-    private String face_image_big;
+    private String faceImageBig;
 
     private String nickname;
 

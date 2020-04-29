@@ -7,15 +7,19 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.locationtech.jts.geom.Point;
 
+import java.io.Serializable;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserSearchVO {
+public class UserSearchVO implements Serializable {
     private Integer id;
+    private String username;
     private Integer age;
-    private boolean gender;
+    private Integer gender;
     private String face_image;
-    private String pickname;
+    private String nickname;
     @JSONField(serializeUsing = GeoCodc.class)
     private Point location;
+    private Double distance;
 }

@@ -7,12 +7,12 @@
 
     <cache/>
 
-    <select id="listUserByLoc" resultType="com.find.pojo.po.User">
+    <select id="listUserByLoc" resultType="com.find.pojo.vo.UserSearchVO">
         select
-        <include refid="user_columns"/>
+        <include refid="user_columns"/>,ST_Distance(location::geography,#{centerPoint}::geography) as distance
         from chat_user
-        where ST_DWithin(location,#{centerPoint},#{redius})
-        order by ST_Distance(location,#{centerPoint})
+        where ST_DWithin(location::geography,#{centerPoint}::geography,#{redius})
+        order by distance
         limit #{userCount}
     </select>
 

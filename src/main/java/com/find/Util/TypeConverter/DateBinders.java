@@ -4,6 +4,7 @@ import com.find.Util.Enum.EnumImp.ControlEnum.FriendRequestHandleEnum;
 import com.find.Util.Enum.EnumImp.POJOEnum.GenderEnum;
 import com.find.Util.Enum.EnumImp.POJOEnum.SignStatusEnum;
 import com.find.Util.Utils.JsonUtils;
+import org.locationtech.jts.geom.Geometry;
 
 import java.beans.PropertyEditorSupport;
 import java.time.LocalDateTime;
@@ -15,7 +16,9 @@ public class DateBinders{
     public static class GeoBinder extends PropertyEditorSupport{
         @Override
         public void setAsText(String text) throws IllegalArgumentException {
-            setValue(JsonUtils.geoJsonToGeom(text));
+            Geometry geom = JsonUtils.geoJsonToGeom(text);
+            geom.setSRID(4326);
+            setValue(geom);
         }
     }
 

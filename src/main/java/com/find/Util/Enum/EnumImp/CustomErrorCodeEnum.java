@@ -31,6 +31,7 @@ public enum CustomErrorCodeEnum {
     NO_FRINEND_RELATION(30006,"不存在好友关系"),
     NO_MESSAGE(30007,"消息不存在"),
     NO_USER_TAG(30008,"用户标签不存在"),
+    FACE_IMAGE_UPLOAD_ERROR(30009,"用户照片上传失败"),
 
     /* 系统错误：40001-49999 */
     SYSTEM_INNER_ERROR(40001, "系统繁忙，请稍后重试"),

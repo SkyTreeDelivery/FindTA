@@ -42,6 +42,7 @@ server:
       timeout: 30m
   tomcat:
     uri-encoding: utf-8
+  max-http-header-size: 4048576
 
 fdfs:
   so-timeout: 1501

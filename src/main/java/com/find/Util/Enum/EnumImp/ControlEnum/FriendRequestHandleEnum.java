@@ -1,8 +1,8 @@
 package com.find.Util.Enum.EnumImp.ControlEnum;
 
 public enum FriendRequestHandleEnum {
-    REQUEST_FRIEND(0,"接收朋友"),
-    REJECT_FRIEND(1,"拒绝朋友");
+    REJECT_FRIEND(0,"拒绝朋友"),
+    REQUEST_FRIEND(1,"接收朋友");
 
     public final Integer code;
     public final String msg;
