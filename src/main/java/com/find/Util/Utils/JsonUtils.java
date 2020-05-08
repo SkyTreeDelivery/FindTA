@@ -1,11 +1,14 @@
 package com.find.Util.Utils;
 
+import com.alibaba.fastjson.parser.ParserConfig;
 import com.alibaba.fastjson.serializer.JSONSerializer;
 import com.alibaba.fastjson.serializer.ObjectSerializer;
 import com.alibaba.fastjson.serializer.SerializeConfig;
 import com.alibaba.fastjson.serializer.SerializeWriter;
+import com.find.Util.TypeConverter.GeoCodc;
 import org.geotools.geojson.geom.GeometryJSON;
 import org.locationtech.jts.geom.Geometry;
+import org.locationtech.jts.geom.Point;
 import org.locationtech.jts.io.ParseException;
 import org.locationtech.jts.io.WKTReader;
 
@@ -17,6 +20,14 @@ import java.lang.reflect.Type;
 import java.util.Date;
 
 public class JsonUtils {
+
+    private static ParserConfig geoParserConfig;
+    static {
+        // 处理自定义对象Geometry的反序列化
+        geoParserConfig = new ParserConfig();
+        // geoParserConfig.putDeserializer(Geometry.class,new GeoCodc());
+        geoParserConfig.putDeserializer(Point.class,new GeoCodc());
+    }
 
     public static String wktToGeoJson(String wkt){
         try {
@@ -137,5 +148,9 @@ public class JsonUtils {
         } finally {
             out.close();
         }
+    }
+
+    public static ParserConfig getGeoParserConfig(){
+        return geoParserConfig;
     }
 }

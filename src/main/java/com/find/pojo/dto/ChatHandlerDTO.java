@@ -1,6 +1,6 @@
 package com.find.pojo.dto;
 
-import com.find.pojo.po.Message;
+import com.find.pojo.dto.DtoPo.MessageAcceptDTO;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -13,12 +13,13 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ChatHandlerDTO implements Serializable {
-    @NotNull(message = "handlerType不能为空")
-    private Integer handlerType;
+    @NotNull(message = "handleType不能为空")
+    private Integer handleType;
 
-    private Integer connectUserId;
+    @NotNull(message = "token不能为空")
+    private String token;
 
-    private Message message;
+    private MessageAcceptDTO message;
 
     private List<Integer> ids;
 }

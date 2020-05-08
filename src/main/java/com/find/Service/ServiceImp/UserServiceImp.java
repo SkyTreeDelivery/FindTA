@@ -15,6 +15,7 @@ import com.find.pojo.dto.MessageDTO;
 import com.find.pojo.dto.UserLocDTO;
 import com.find.pojo.po.*;
 import com.find.pojo.vo.*;
+import lombok.SneakyThrows;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -23,10 +24,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
 import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -59,6 +57,7 @@ public class UserServiceImp implements UserService {
     @Resource
     FastDFSClient fastDFSClient;
 
+    @SneakyThrows
     @Override
     @Transactional(propagation = Propagation.REQUIRED)
     public User register(UserDTO userDTO) throws CustomException {
@@ -72,6 +71,7 @@ public class UserServiceImp implements UserService {
         //3. 注册用户，注册完成后自动登录，返回token
         String token = getUniToken();
         user.setToken(token);
+
         user.setPassword(MD5Util.getMD5Str(user.getPassword()));
         userMapper.insert(user);
         User newUser = getUserByUsername(user.getUsername());
@@ -404,6 +404,7 @@ public class UserServiceImp implements UserService {
         return messageMapper.selectById(messageId);
     }
 
+    @SneakyThrows
     @Override
     @Transactional(propagation = Propagation.SUPPORTS)
     public List<MessageVO> listChatMsg(MessageDTO messageDTO) {
@@ -414,18 +415,6 @@ public class UserServiceImp implements UserService {
                 .le("gmt_created",messageDTO.getEndTime())
                 .orderByDesc("msg_index")
                 .last("limit " + messageDTO.getMessageCount());
-
-//        已废弃
-//        wrapper.and(e->{
-//            e.eq("send_user_id",messageDTO.getSendUserId())
-//                    .eq("accept_user_id",messageDTO.getAcceptUserId());
-//        }).or(e->{
-//            e.eq("send_user_id",messageDTO.getAcceptUserId())
-//                    .eq("accept_user_id",messageDTO.getSendUserId());
-//        })
-//                .le("gmt_created",messageDTO.getEndTime())
-//                .orderByDesc("gmt_created")
-//                .last("limit " + messageDTO.getMessageCount());
         List<Message> messages = messageMapper.selectList(wrapper);
         List<Message> messageSort = messages.stream()
                 .sorted((a, b) -> {
@@ -436,20 +425,28 @@ public class UserServiceImp implements UserService {
         return messageVOS;
     }
 
+    @SneakyThrows
     @Override
     @Transactional(propagation = Propagation.SUPPORTS)
-    public List<MessageVO> listAllUnSignMessage(Integer userId) {
+    public Map<Integer, List<MessageVO>> listAllUnSignMessage(Integer userId) {
         QueryWrapper<Message> wrapper = new QueryWrapper<>();
+        //签收的消息时接收为为该用户的所有未签收的消息，这些消息只能是在你离线期间其他用户发送给该用户的，
+        // 不会查询出该用户自己发出的消息
         wrapper.eq("accept_user_id",userId)
                 .eq("sign_flag", SignStatusEnum.UNSIGN.code);
         List<Message> messages = messageMapper.selectList(wrapper);
         List<MessageVO> messageVOS = BeanArrayUtils.copyListProperties(messages, MessageVO.class);
-        return messageVOS;
+        Map<Integer, List<MessageVO>> sendUserIdMessagesMap = messageVOS.stream()
+                .sorted((a,b)->{
+                   return a.getMsgIndex().compareTo(b.getMsgIndex());
+                })
+                .collect(Collectors.groupingBy(MessageVO::getSendUserId));
+        return sendUserIdMessagesMap;
     }
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED)
-    public Boolean signMessage(List<Integer> ids) {
+    public Boolean signMessages(List<Integer> ids) {
         List<Message> messages = messageMapper.selectBatchIds(ids);
         messages.forEach(m->{
             m.setSignFlag(SignStatusEnum.SIGNED.code);
@@ -528,6 +525,7 @@ public class UserServiceImp implements UserService {
 
     /*=========================   friendrequest      ============================= */
 
+    @SneakyThrows
     @Override
     @Transactional(propagation = Propagation.REQUIRED)
     public Boolean addFriendRequest( FriendRequestDTO requestDTO) throws CustomException {
@@ -568,7 +566,7 @@ public class UserServiceImp implements UserService {
     public List<FriendRequestListVO> listFriendRequestsByUserId(Integer userId) throws Exception{
         //查询用户的所有好友请求关系
         QueryWrapper<FriendRequest> wrapper = new QueryWrapper<>();
-        wrapper.eq("send_user_id",userId);
+        wrapper.eq("accept_user_id",userId);
         List<FriendRequest> friendRequests = requestMapper.selectList(wrapper);
         if(friendRequests.size() == 0){
             return new ArrayList<FriendRequestListVO>();
@@ -633,6 +631,7 @@ public class UserServiceImp implements UserService {
         return requestMapper.selectById(friendRequestId) != null;
     }
 
+    @SneakyThrows
     @Override
     @Transactional(propagation = Propagation.REQUIRED)
     public Boolean addUserTag(UserTagDTO userTagDTO) throws CustomException {
@@ -649,6 +648,7 @@ public class UserServiceImp implements UserService {
         return userTagMapper.selectById(userTagId);
     }
 
+    @SneakyThrows
     @Override
     @Transactional(propagation = Propagation.SUPPORTS)
     public List<UserTagVO> listTagsByUserId(Integer userId) throws CustomException {

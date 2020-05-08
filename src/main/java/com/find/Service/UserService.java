@@ -12,6 +12,7 @@ import com.find.pojo.vo.*;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 
 @Service
 public interface UserService {
@@ -75,9 +76,9 @@ public interface UserService {
 
     List<MessageVO> listChatMsg(MessageDTO messageDTO);
 
-    List<MessageVO> listAllUnSignMessage(Integer userId);
+    Map<Integer, List<MessageVO>> listAllUnSignMessage(Integer userId);
 
-    Boolean signMessage(List<Integer> ids);
+    Boolean signMessages(List<Integer> ids);
 
     Boolean signAllMessages(Integer userId);
 

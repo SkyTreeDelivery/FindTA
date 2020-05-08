@@ -4,6 +4,9 @@ import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.annotation.JSONField;
 import com.find.Util.Enum.EnumImp.HttpResponseEnum;
 import com.find.Util.Exception.CustomException;
+import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
 
 import java.io.Serializable;
 
@@ -66,8 +69,14 @@ public class HttpResultBuiler {
     /*=============================== 自定义异常处理 ===================================*/
     /*-------------------------------- exception ----------------------------------------------*/
 
+    /**
+     *  处理自定义异常，转换为HttpResult，默认响应代码500
+     * @param ex
+     * @param <T>
+     * @return
+     */
     public static <T> HttpResult<T> exception(CustomException ex){
-        return new HttpResult<T>(ex.getCostomErrorCodeEnum().code,ex.getMessage(), null);
+        return new HttpResult<T>(500,ex.getMessage(), null);
     }
 
 
@@ -77,40 +86,20 @@ public class HttpResultBuiler {
      * http返回的json格式的结果，为响应的主体结构
      * @param <T>
      */
+    @EqualsAndHashCode
+    @Getter
+    @AllArgsConstructor
     public static class HttpResult<T> implements Serializable {
         @JSONField(ordinal = 0)
-        Integer code;
+        Integer status;
         @JSONField(ordinal = 1)
         String msg;
         @JSONField(ordinal = 2)
         T data;
 
-        /**
-         * httpresult构造器，只能通过HttpResultHelper的静态方法调用
-         * @param code code码
-         * @param msg 默认使用status的getReasonPhraseCN方法获取的信息
-         * @param data 传输的数据
-         */
-
-        private HttpResult(Integer code, String msg, T data){
-            this.code = code;
-            this.msg = msg;
-            this.data = data;
-        }
-
         @Override
         public String toString() {
             return JSONObject.toJSONString(this);
-        }
-
-        public Integer getStatus() {
-            return code;
-        }
-        public String getMsg() {
-            return msg;
-        }
-        public T getData() {
-            return data;
         }
     }
 }

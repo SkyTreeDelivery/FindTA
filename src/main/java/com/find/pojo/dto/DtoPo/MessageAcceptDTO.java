@@ -13,9 +13,7 @@ import java.io.Serializable;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class MessageDTO implements Serializable {
-    @NotNull(message = "sendUserId不能为空")
-    private Integer sendUserId;
+public class MessageAcceptDTO implements Serializable {
 
     @NotNull(message = "acceptUserId不能为空")
     private Integer acceptUserId;
@@ -23,9 +21,9 @@ public class MessageDTO implements Serializable {
     @NotNull(message = "message不能为空")
     private String message;
 
-    @JSONField(serializeUsing = GeoCodc.class)
+    @JSONField(serializeUsing = GeoCodc.class,deserializeUsing = GeoCodc.class)
     private Point sendUserLoc;
 
-    @JSONField(serializeUsing = GeoCodc.class)
+    @JSONField(serializeUsing = GeoCodc.class,deserializeUsing = GeoCodc.class)
     private Point acceptUserLoc;
 }

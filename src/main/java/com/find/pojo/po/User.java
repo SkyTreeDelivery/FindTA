@@ -35,7 +35,7 @@ public class User implements Serializable {
 
     private String email;
 
-    @JSONField(serializeUsing = GeoCodc.class)
+    @JSONField(serializeUsing = GeoCodc.class,deserializeUsing = GeoCodc.class)
     private Point location;
 
     private String cid;

@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.js"></script>
+
+<script >
+    var t1 = {type:"Point",coordinates:[10.10]}
+    var t = {"type":"Point","coordinates":[10,10]}
+    var s = JSON.stringify(t);
+    var s2 = JSON.stringify(t1);
+    var o = {"json": s};
+    var s1 = JSON.stringify(s);
+
+    $.get("http://localhost:5757/user/queryUsersByLoc", {
+        token:"2f0109cd-aa42-4e2f-8568-091e4be5d558",
+        userCount:100,
+        redius:200000000000,
+        centerPoint:{"type":"Point","coordinates":[10,10]}
+    })
+</script>
+
+</body>
+</html>

@@ -12,9 +12,10 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 public class MessageVO  implements Serializable {
-    @JSONField(name = "messageId")
+    @JSONField(name = "messageId",ordinal = 0)
     private Integer id;
     private Integer sendUserId;
+    private Integer msgIndex;
     private String message;
     private LocalDateTime gmtCreated;
 }

@@ -17,7 +17,7 @@ import java.io.Serializable;
 public class UserLocDTO implements Serializable {
 
     @NotNull(message = "查询点坐标不能为空")
-    @JSONField(serializeUsing = GeoCodc.class)
+    @JSONField(serializeUsing = GeoCodc.class,deserializeUsing = GeoCodc.class)
     private Point centerPoint;
 
     @NotNull(message = "查询的用户数量不能为空")

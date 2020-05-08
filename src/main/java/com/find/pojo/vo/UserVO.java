@@ -13,6 +13,7 @@ import java.io.Serializable;
 @NoArgsConstructor
 @AllArgsConstructor
 public class UserVO implements Serializable {
+    @JSONField(ordinal = 0)
     private Integer id;
     private String username;
     private Integer age;
@@ -21,7 +22,7 @@ public class UserVO implements Serializable {
     private String faceImageBig;
     private String nickname;
     private String email;
-    @JSONField(serializeUsing = GeoCodc.class)
+    @JSONField(serializeUsing = GeoCodc.class,deserializeUsing = GeoCodc.class)
     private Point location;
     private String phone;
 }

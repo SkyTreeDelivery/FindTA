@@ -38,7 +38,7 @@ public class UserDTO  implements Serializable {
     @Email
     private String email;
 
-    @JSONField(serializeUsing = GeoCodc.class)
+    @JSONField(serializeUsing = GeoCodc.class,deserializeUsing = GeoCodc.class)
     private Point location;
 
     @NotNull(message = "设备id不能为空")

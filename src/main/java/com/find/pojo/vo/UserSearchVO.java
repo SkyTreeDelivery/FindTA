@@ -13,13 +13,14 @@ import java.io.Serializable;
 @NoArgsConstructor
 @AllArgsConstructor
 public class UserSearchVO implements Serializable {
+    @JSONField(ordinal = 0)
     private Integer id;
     private String username;
     private Integer age;
     private Integer gender;
     private String face_image;
     private String nickname;
-    @JSONField(serializeUsing = GeoCodc.class)
+    @JSONField(serializeUsing = GeoCodc.class,deserializeUsing = GeoCodc.class)
     private Point location;
     private Double distance;
 }

@@ -53,7 +53,7 @@ public class UserController {
 
 
     @RequestMapping("login")
-    public Map<String,Object> loginUser(String username, String password, String cid) throws CustomException {
+    public Map<String,Object> loginUser(String username, String password, String cid) throws CustomException, InstantiationException, IllegalAccessException {
 //        1. 判断参数
         if(StringUtils.isBlank(username)
                 || StringUtils.isBlank(password)
@@ -242,8 +242,6 @@ public class UserController {
         Boolean result = userService.removeFriend(myId,friendId);
         return result;
     }
-
-
     /*============================ message =======================================================*/
     @RequestMapping("queryMessageById")
     public Message queryMessageById(Integer messageId) throws CustomException {
@@ -267,8 +265,8 @@ public class UserController {
         return messageVOS;
     }
 
-    @RequestMapping("signAlldMessage")
-    public Boolean signAllUnSignedMessage(Integer userId) throws CustomException {
+    @RequestMapping("listAllUnsignedMsg")
+    public Map<Integer, List<MessageVO>> listAllUnsignedMsg(Integer userId) throws CustomException {
         if(userId == null ){
             throw new CustomException(CustomErrorCodeEnum.PARAM_VERIFY_ERROR
                     ,"userId不能为空");
@@ -276,7 +274,7 @@ public class UserController {
         if(!userService.userIsExist(userId)){
             throw new CustomException(CustomErrorCodeEnum.USER_NOT_EXIST);
         }
-        return userService.signAllMessages(userId);
+        return userService.listAllUnSignMessage(userId);
     }
 
     /*============================ tag =======================================================*/

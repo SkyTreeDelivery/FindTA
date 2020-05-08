@@ -13,8 +13,8 @@ import java.lang.reflect.Type;
 public class GeoCodc implements ObjectSerializer, ObjectDeserializer {
     @Override
     public <T> T deserialze(DefaultJSONParser parser, Type type, Object fieldName) {
-        String geoJson = parser.lexer.stringVal();
-        return (T) JsonUtils.geoJsonToGeom(geoJson);
+        String s = parser.lexer.stringVal();
+        return (T) JsonUtils.geoJsonToGeom(s);
     }
 
     @Override

@@ -11,7 +11,7 @@ import java.io.Serializable;
 @NoArgsConstructor
 @AllArgsConstructor
 public class FriendRequestListVO  implements Serializable {
-    @JSONField(name = "friendRequestId")
+    @JSONField(name = "friendRequestId",ordinal = 0)
     private Integer id;
     private Integer sendUserId;
     private String requestMessage;

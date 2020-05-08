@@ -23,6 +23,7 @@ public class CustomExceptionHandler {
     @ExceptionHandler(Exception.class)
     @ResponseBody
     public HttpResultBuiler.HttpResult<Object> exceptionHandle(Exception ex, HttpServletRequest request, HttpServletResponse response){
+        logger.info(ex.getMessage());
         ex.printStackTrace();
         if(ex instanceof CustomException){    //处理自定义错误
             response.setStatus(HttpResponseEnum.OK.code);

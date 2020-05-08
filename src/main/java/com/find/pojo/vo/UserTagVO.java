@@ -11,7 +11,7 @@ import java.io.Serializable;
 @NoArgsConstructor
 @AllArgsConstructor
 public class UserTagVO implements Serializable {
-    @JSONField(name = "userTagId")
+    @JSONField(name = "userTagId",ordinal = 0)
     private Integer id;
     private Integer tagId;
 

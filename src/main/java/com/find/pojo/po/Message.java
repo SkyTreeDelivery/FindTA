@@ -26,10 +26,10 @@ public class Message implements Serializable {
 
     private Integer signFlag;
 
-    @JSONField(serializeUsing = GeoCodc.class)
+    @JSONField(serializeUsing = GeoCodc.class,deserializeUsing = GeoCodc.class)
     private Point sendUserLoc;
 
-    @JSONField(serializeUsing = GeoCodc.class)
+    @JSONField(serializeUsing = GeoCodc.class,deserializeUsing = GeoCodc.class)
     private Point acceptUserLoc;
 
     Integer partId;

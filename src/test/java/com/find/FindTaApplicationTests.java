@@ -1,5 +1,6 @@
 package com.find;
 
+import com.alibaba.fastjson.JSON;
 import com.find.Service.UserService;
 import com.find.Util.Enum.EnumImp.POJOEnum.GenderEnum;
 import com.find.Util.Enum.EnumImp.POJOEnum.SignStatusEnum;
@@ -8,12 +9,12 @@ import com.find.Util.Utils.JsonUtils;
 import com.find.Util.Utils.StringUtils;
 import com.find.Util.Utils.ValidateUtils;
 import com.find.mapper.UserMapper;
+import com.find.pojo.dto.DtoPo.MessageAcceptDTO;
 import com.find.pojo.dto.DtoPo.UserDTO;
 import com.find.pojo.po.Message;
 import com.find.pojo.po.User;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.util.Base64Utils;
 import sun.misc.BASE64Encoder;
 
@@ -27,7 +28,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
-@SpringBootTest
+// @SpringBootTest
 class FindTaApplicationTests {
 
 	@Autowired
@@ -199,5 +200,19 @@ class FindTaApplicationTests {
 		System.out.println("data : " + data);
 		String s = Base64Utils.encodeToString(bytes);
 		System.out.println("baseUtils : " + s);
+	}
+
+	@Test
+	public void testQ(){
+        String str = "{\n" +
+				"    \"acceptUserId\": 45,\n" +
+				"    \"message\": \"test\",\n" +
+				"    \"sendUserLoc\": \"{\\\"type\\\":\\\"Point\\\",\\\"coordinates\\\":[10,10]}\",\n" +
+				"    \"acceptUserLoc\": \"{\\\"type\\\":\\\"Point\\\",\\\"coordinates\\\":[10,10]}\"\n" +
+				"}";
+		str = str.replace("\n", "").replace(" ","");
+		Object o = JSON.parseObject(str, MessageAcceptDTO.class);
+
+		System.out.println(o);
 	}
 }
